@@ -1,0 +1,119 @@
+{% load core_tags %}
+{% load vite %}
+{% load i18n %}
+<!DOCTYPE html>
+{% get_current_language as lang %}
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Lorebook{% endblock %}</title>
+
+  {% block head %}
+  {% endblock %}
+
+  {% vite "assets/js/app.ts" %}
+</head>
+
+<body>
+
+<div class="app">
+  <!-- Main navigation -->
+  <aside class="sidebar" id="main-sidebar" hx-boost:inherited="true">
+    <div class="sidebar-content">
+      <div class="sidebar-top">
+        <div class="sidebar-brand text-2xl font-semibold">Lorebook</div>
+        <nav>
+          <ul class="sidebar-nav">
+            <li class="sidebar-item active">
+              <a href="{{ module.url }}" class="sidebar-link">
+                <i class="fa-solid fa-newspaper fa-fw"></i>
+                <span>Articles</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <ul class="sidebar-nav">
+{#          <li class="sidebar-item">#}
+{#            <a href="#" class="sidebar-link">#}
+{#              <i class="fa-solid fa-circle-question fa-fw"></i>#}
+{#              Help#}
+{#            </a>#}
+{#          </li>#}
+{#          <li class="sidebar-item">#}
+{#            <a href="#" class="sidebar-link">#}
+{#              <i class="fa-solid fa-cog fa-fw"></i>#}
+{#              Settings#}
+{#            </a>#}
+{#          </li>#}
+          <li class="sidebar-item">
+            <form action="" method="post">
+              {% csrf_token %}
+              <button class="sidebar-link" type="submit">
+                <i class="fa-solid fa-sign-out fa-fw"></i>
+                {% trans 'Logout' %}
+              </button>
+            </form>
+          </li>
+        </ul>
+        <div class="p-4 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="avatar shrink-0">
+              {{ request.user.initials }}
+            </div>
+            <div>
+              <div class="font-semibold text-gray-800">{{ request.user.full_name }}</div>
+              <div class="text-gray-600">{{ request.user.email }}</div>
+            </div>
+          </div>
+          <div class="dropdown" hx-preserve="true" id="user-menu">
+            <button class="btn btn-icon btn-ghost btn-sm" data-menu-toggle>
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="menu">
+              <div class="menu-group">
+                <form action="" method="post">
+                  {% csrf_token %}
+                  <button class="menu-item" type="submit">
+                    <i class="fa-solid fa-sign-out fa-fw"></i>
+                    {% trans 'Logout' %}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <header class="topbar">
+    <button class="btn btn-icon btn-ghost btn-sidebar-toggle" data-sidebar="#main-sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-center"></div>
+  </header>
+  <main class="main">
+    {% block content %}
+    {% endblock %}
+  </main>
+</div>
+
+{% if debug %}
+    <script>
+    if (typeof window.htmx !== "undefined") {
+        htmx.on("htmx:after:settle", function(detail) {
+            if (
+                typeof window.djdt !== "undefined"
+                && detail.target instanceof HTMLBodyElement
+            ) {
+                djdt.show_toolbar();
+            }
+        });
+    }
+    </script>
+{% endif %}
+
+</body>
+</html>

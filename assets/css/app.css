@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@import "@fortawesome/fontawesome-free/css/fontawesome.css";
+@import "@fortawesome/fontawesome-free/css/solid.css";
+@import "@fortawesome/fontawesome-free/css/regular.css";
+@import "@fortawesome/fontawesome-free/css/brands.css";
+@import "theme.css";
+
+:root {
+  --bl-fw-bold: 600;
+  --bl-fw-medium: 500;
+  --bl-font-sans: "Inter Variable", sans-serif;
+
+  --bl-clr-primary-50: var(--bl-clr-indigo-50);
+  --bl-clr-primary-100: var(--bl-clr-indigo-100);
+  --bl-clr-primary-200: var(--bl-clr-indigo-200);
+  --bl-clr-primary-300: var(--bl-clr-indigo-300);
+  --bl-clr-primary-400: var(--bl-clr-indigo-400);
+  --bl-clr-primary-500: var(--bl-clr-indigo-500);
+  --bl-clr-primary-600: var(--bl-clr-indigo-600);
+  --bl-clr-primary-700: var(--bl-clr-indigo-700);
+  --bl-clr-primary-800: var(--bl-clr-indigo-800);
+  --bl-clr-primary-900: var(--bl-clr-indigo-900);
+  --bl-clr-primary-950: var(--bl-clr-indigo-950);
+}
+
+@theme {
+  --color-primary-50: var(--bl-clr-primary-50);
+  --color-primary-100: var(--bl-clr-primary-100);
+  --color-primary-200: var(--bl-clr-primary-200);
+  --color-primary-300: var(--bl-clr-primary-300);
+  --color-primary-400: var(--bl-clr-primary-400);
+  --color-primary-500: var(--bl-clr-primary-500);
+  --color-primary-600: var(--bl-clr-primary-600);
+  --color-primary-700: var(--bl-clr-primary-700);
+  --color-primary-800: var(--bl-clr-primary-800);
+  --color-primary-900: var(--bl-clr-primary-900);
+  --color-primary-950: var(--bl-clr-primary-950);
+
+  --font-sans: var(--bl-font-sans);
+  --font-weight-bold: var(--bl-fw-bold);
+
+  --text-xs: var(--bl-fs-xs);
+  --text-sm: var(--bl-fs-sm);
+  --text-base: var(--bl-fs-base);
+  --text-lg: var(--bl-fs-lg);
+  --text-xl: var(--bl-fs-xl);
+  --text-2xl: var(--bl-fs-2xl);
+  --text-3xl: var(--bl-fs-3xl);
+  --text-4xl: var(--bl-fs-4xl);
+  --text-5xl: var(--bl-fs-5xl);
+  --text-6xl: var(--bl-fs-6xl);
+  --text-7xl: var(--bl-fs-7xl);
+  --text-8xl: var(--bl-fs-8xl);
+  --text-9xl: var(--bl-fs-9xl);
+}
+
+[x-cloak] {
+  display: none !important;
+}
