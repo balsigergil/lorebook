@@ -151,3 +151,18 @@ def test_styled_404(client, db):
     response = client.get(public_url("collection", "fr", "nope"))
     assert response.status_code == 404
     assert "error-page" in response.content.decode()
+
+
+def test_sitemap_and_robots(client, published, private_collection):
+    de = content.add_translation(published.article, "de", copy_from=published)
+    content.publish(de, kind="sync")
+    secret = content.create_article(private_collection, title="Secret", language="fr")
+    content.publish(secret)
+    body = client.get("/sitemap.xml").content.decode()
+    assert f"http://testserver/fr/docs/{published.article.slug}/" in body
+    assert f'hreflang="de" href="http://testserver/de/docs/{published.article.slug}/"' in body
+    assert "handbook" not in body
+    robots = client.get("/robots.txt").content.decode()
+    assert "Disallow: /internal/" in robots
+    assert "Sitemap: http://testserver/sitemap.xml" in robots
+    assert client.get("/internal/sitemap.xml").status_code in (302, 404)
