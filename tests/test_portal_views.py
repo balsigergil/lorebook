@@ -48,7 +48,7 @@ def test_missing_language_banner(client, published):
     url = public_url("article", "de", "docs", published.article.slug)
     response = client.get(url)
     assert response.status_code == 200
-    assert "Not yet available in Deutsch" in response.content.decode()
+    assert "Noch nicht auf Deutsch verfügbar" in response.content.decode()
 
 
 def test_outdated_banner(client, published, editor):
@@ -57,7 +57,7 @@ def test_outdated_banner(client, published, editor):
     content.publish(published, kind="update")
     response = client.get(public_url("article", "de", "docs", published.article.slug))
     body = response.content.decode()
-    assert "This version is not up to date." in body
+    assert "Diese Version ist nicht aktuell." in body
     assert public_url("article", "fr", "docs", published.article.slug) in body
 
 
