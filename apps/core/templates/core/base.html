@@ -17,6 +17,7 @@
 {% if messages %}
   <script type="application/json" id="lorebook-messages">[{% for message in messages %}{"level": "{{ message.tags|escapejs }}", "text": "{{ message|escapejs }}"}{% if not forloop.last %},{% endif %}{% endfor %}]</script>
 {% endif %}
+<script type="application/json" id="lorebook-strings">{"comboboxPlaceholder": "{% translate 'Select…'|escapejs %}", "noResults": "{% translate 'No results'|escapejs %}", "copy": "{% translate 'Copy'|escapejs %}"}</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

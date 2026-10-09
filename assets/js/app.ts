@@ -90,12 +90,22 @@ document.body.addEventListener("lorebook:toast", (event) => {
   showToast(detail.level ?? "info", detail.text ?? "");
 });
 
+// Interface strings translated by Django (core/base.html).
+const strings: Record<string, string> = (() => {
+  try {
+    return JSON.parse(document.getElementById("lorebook-strings")?.textContent ?? "{}");
+  } catch {
+    return {};
+  }
+})();
+
 function enhance(root: ParentNode = document) {
   root.querySelectorAll<ComboboxInput>(".input-combobox").forEach((el) => {
     if (el.blcombobox !== undefined) return;
     new Combobox(el, {
       isSearchable: true,
-      noResultsText: el.closest("[lang]")?.getAttribute("lang") === "fr" ? "Aucun résultat" : "No results",
+      placeholder: strings.comboboxPlaceholder,
+      noResultsText: strings.noResults,
     });
   });
 
@@ -145,7 +155,7 @@ function addCopyButtons() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "code-copy btn btn-ghost btn-xs";
-    button.setAttribute("aria-label", "Copy");
+    button.setAttribute("aria-label", strings.copy ?? "Copy");
     button.innerHTML = '<i class="fa-regular fa-copy"></i>';
     button.addEventListener("click", async () => {
       const code = block.querySelector("code")?.textContent ?? "";
