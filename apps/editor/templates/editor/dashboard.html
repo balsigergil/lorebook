@@ -1,0 +1,88 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Dashboard" %}{% endblock %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% blocktranslate with name=request.user.first_name|default:request.user.email %}Hello {{ name }}{% endblocktranslate %}</h1>
+      <p class="page-subtitle">{% translate "Write, translate and publish your documentation." %}</p>
+    </div>
+    {% if user_is_admin %}
+      <a href="{% url 'edit:collection-create' %}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> {% translate "New collection" %}</a>
+    {% endif %}
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">{% translate "Collections" %}</h2>
+    <div class="card-grid">
+      {% for collection, count in collections %}
+        <a class="card collection-card" href="{% url 'edit:collection' collection.slug %}">
+          <div class="card-body">
+            <div class="collection-card-icon"><i class="fa-solid fa-{{ collection.icon|default:'book' }}"></i></div>
+            <h3 class="collection-card-title">{{ collection.name }}</h3>
+            <p class="collection-card-text">{{ collection.description|default:""|truncatechars:120 }}</p>
+            <div class="collection-card-meta">
+              {% if collection.is_public %}<span class="tag tag-sm tag-success"><i class="fa-solid fa-globe"></i> {% translate "Public" %}</span>{% else %}<span class="tag tag-sm"><i class="fa-solid fa-lock"></i> {% translate "Internal" %}</span>{% endif %}
+              <span class="text-light">{% blocktranslate count counter=count %}{{ counter }} article{% plural %}{{ counter }} articles{% endblocktranslate %}</span>
+            </div>
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty-state">
+          <i class="fa-regular fa-folder-open"></i>
+          <p>{% translate "No collection yet." %}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div class="dashboard-columns">
+    <section class="section">
+      <h2 class="section-title"><i class="fa-solid fa-pen-to-square"></i> {% translate "Unpublished changes" %}</h2>
+      <div class="card">
+        <ul class="list">
+          {% for translation in drafts %}
+            <li class="list-item">
+              <a href="{% url 'edit:editor' translation.article_id translation.language %}">{{ translation.draft_title }}</a>
+              <span class="list-meta">{{ translation.article.collection.name }} · {{ translation.language|upper }} · {% blocktranslate with since=translation.draft_updated_at|timesince %}{{ since }} ago{% endblocktranslate %}</span>
+            </li>
+          {% empty %}
+            <li class="list-item list-empty">{% translate "Everything is published." %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+    <section class="section">
+      <h2 class="section-title"><i class="fa-solid fa-language"></i> {% translate "Outdated translations" %}</h2>
+      <div class="card">
+        <ul class="list">
+          {% for translation in outdated %}
+            <li class="list-item">
+              <a href="{% url 'edit:editor' translation.article_id translation.language %}">{{ translation.title }}</a>
+              <span class="list-meta">{{ translation.article.collection.name }} · <span class="status status-outdated">{{ translation.language|upper }}</span></span>
+            </li>
+          {% empty %}
+            <li class="list-item list-empty">{% translate "All translations are up to date." %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+    <section class="section">
+      <h2 class="section-title"><i class="fa-solid fa-chart-simple"></i> {% translate "Most read (30 days)" %}</h2>
+      <div class="card">
+        <ul class="list">
+          {% for translation, views in popular %}
+            <li class="list-item">
+              <a href="{% url 'edit:article' translation.article_id %}">{{ translation.title }}</a>
+              <span class="list-meta">{% blocktranslate count counter=views %}{{ counter }} read{% plural %}{{ counter }} reads{% endblocktranslate %}</span>
+            </li>
+          {% empty %}
+            <li class="list-item list-empty">{% translate "No reads yet." %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

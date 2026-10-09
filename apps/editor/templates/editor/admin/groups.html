@@ -1,0 +1,35 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Groups" %}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Groups" %}</h1>
+      <p class="page-subtitle">{% translate "Groups receive a role on collections and can be allowed to read restricted articles." %}</p>
+    </div>
+  </header>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead><tr><th>{% translate "Group" %}</th><th>{% translate "Members" %}</th><th>{% translate "Collections" %}</th></tr></thead>
+        <tbody>
+          {% for group in groups %}
+            <tr>
+              <td><a href="{% url 'edit:group' group.pk %}"><i class="fa-solid fa-users text-light"></i> {{ group.name }}</a></td>
+              <td>{{ group.member_count }}</td>
+              <td>{{ group.collection_count }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3" class="text-light">{% translate "No group yet." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">{% translate "New group" %}</h2></div>
+    <div class="card-body">{% include "core/forms/htmx_form.html" %}</div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{{ collection.name }}{% endblock %}
+{% block content %}
+<div class="page">
+  {% include "editor/_collection_header.html" %}
+  <div class="toolbar">
+    <div class="toolbar-group">
+      <button class="btn btn-primary" data-modal="#modal-new-article"><i class="fa-solid fa-plus"></i> {% translate "New article" %}</button>
+      <button class="btn btn-outline" data-modal="#modal-import"><i class="fa-brands fa-markdown"></i> {% translate "Import Markdown" %}</button>
+    </div>
+    <div class="toolbar-group legend">
+      <span class="status status-published">{% translate "Published" %}</span>
+      <span class="status status-published status-changed">{% translate "Unpublished changes" %}</span>
+      <span class="status status-draft">{% translate "Draft" %}</span>
+      <span class="status status-outdated">{% translate "Outdated" %}</span>
+      <span class="status status-missing">{% translate "Missing" %}</span>
+    </div>
+  </div>
+
+  {% if rows %}
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table article-table">
+          <thead>
+            <tr>
+              <th>{% translate "Article" %}</th>
+              <th>{% translate "Languages" %}</th>
+              <th class="text-right">{% translate "Order" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+              <tr>
+                <td>
+                  <div class="tree-cell" style="--depth: {{ row.depth }}">
+                    <i class="fa-regular {% if row.node.children %}fa-folder{% else %}fa-file-lines{% endif %} text-light"></i>
+                    <a href="{% url 'edit:article' row.node.article.pk %}" class="tree-link">{{ row.node.title }}</a>
+                    {% if row.restricted %}<i class="fa-solid fa-lock text-light" title="{% translate 'Reading restricted to some groups' %}"></i>{% endif %}
+                  </div>
+                </td>
+                <td>
+                  <div class="status-list">
+                    {% for language, translation in row.cells %}
+                      <a href="{% url 'edit:editor' row.node.article.pk language.code %}" class="status-link">{% include "editor/_status.html" with code=language.code %}</a>
+                    {% endfor %}
+                  </div>
+                </td>
+                <td class="text-right nowrap">
+                  <form method="post" action="{% url 'edit:article-reorder' collection.slug row.node.article.pk %}" class="inline-form">
+                    {% csrf_token %}
+                    <button class="btn btn-icon btn-ghost btn-xs" name="direction" value="up" aria-label="{% translate 'Move up' %}"><i class="fa-solid fa-arrow-up"></i></button>
+                    <button class="btn btn-icon btn-ghost btn-xs" name="direction" value="down" aria-label="{% translate 'Move down' %}"><i class="fa-solid fa-arrow-down"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty-state card">
+      <i class="fa-regular fa-file-lines"></i>
+      <p>{% translate "This collection has no article yet." %}</p>
+      <button class="btn btn-primary" data-modal="#modal-new-article"><i class="fa-solid fa-plus"></i> {% translate "Write the first article" %}</button>
+    </div>
+  {% endif %}
+</div>
+
+<div class="modal" id="modal-new-article" aria-labelledby="modal-new-article-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-new-article-title">{% translate "New article" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      {% include "core/forms/htmx_form.html" with form=create_form in_modal=True %}
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-import" aria-labelledby="modal-import-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-import-title">{% translate "Import Markdown" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-light mb-4">{% translate "A leading # heading or a title in the front matter becomes the title of the article. GitHub alerts (> [!NOTE]) become callouts." %}</p>
+      {% include "core/forms/htmx_form.html" with form=import_form in_modal=True %}
+    </div>
+  </div>
+</div>
+{% endblock %}

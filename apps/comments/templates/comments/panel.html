@@ -1,0 +1,59 @@
+{% load i18n %}
+<section class="comments" id="comments-panel">
+  <header class="comments-header">
+    <h2 class="comments-title">
+      <i class="fa-regular fa-comments"></i> {% translate "Comments" %}
+      {% if open_count %}<span class="tag tag-sm tag-primary">{{ open_count }}</span>{% endif %}
+    </h2>
+    <p class="comments-hint">{% translate "Only visible to signed-in users. Never shown on the public portal." %}</p>
+  </header>
+
+  <form class="comment-form" method="post"
+        hx-post="{% url 'comments:panel' translation.pk %}"
+        hx-target="#comments-panel" hx-swap="outerHTML">
+    {% csrf_token %}
+    {{ form }}
+    <div class="form-actions"><button type="submit" class="btn btn-primary btn-sm">{{ form.submit_label }}</button></div>
+  </form>
+
+  {% for thread in threads %}
+    <article class="thread{% if thread.is_resolved %} thread-resolved{% endif %}" id="thread-{{ thread.pk }}">
+      {% for comment in thread.comments.all %}
+        <div class="comment">
+          <div class="avatar avatar-sm"><span class="avatar-initials">{{ comment.author.initials|default:"?" }}</span></div>
+          <div class="comment-body">
+            <div class="comment-meta">
+              <strong>{{ comment.author.display_name|default:_("Deleted user") }}</strong>
+              <time datetime="{{ comment.created_at|date:'c' }}" title="{{ comment.created_at }}">{% blocktranslate with since=comment.created_at|timesince %}{{ since }} ago{% endblocktranslate %}</time>
+            </div>
+            <div class="comment-text">{{ comment.body|linebreaksbr }}</div>
+          </div>
+        </div>
+      {% endfor %}
+      <footer class="thread-footer">
+        {% if thread.is_resolved %}
+          <span class="thread-status"><i class="fa-solid fa-check"></i>
+            {% blocktranslate with name=thread.resolved_by.display_name|default:"—" %}Resolved by {{ name }}{% endblocktranslate %}</span>
+        {% endif %}
+        {% if thread.can_resolve %}
+          <form method="post" hx-post="{% url 'comments:resolve' thread.pk %}" hx-target="#comments-panel" hx-swap="outerHTML">
+            {% csrf_token %}
+            <input type="hidden" name="resolved" value="{% if thread.is_resolved %}0{% else %}1{% endif %}">
+            <button type="submit" class="btn btn-ghost btn-xs">
+              {% if thread.is_resolved %}<i class="fa-solid fa-rotate-left"></i> {% translate "Reopen" %}{% else %}<i class="fa-solid fa-check"></i> {% translate "Resolve" %}{% endif %}
+            </button>
+          </form>
+        {% endif %}
+      </footer>
+      {% if not thread.is_resolved %}
+        <form class="reply-form" method="post" hx-post="{% url 'comments:reply' thread.pk %}" hx-target="#comments-panel" hx-swap="outerHTML">
+          {% csrf_token %}
+          {{ thread.reply_form }}
+          <div class="form-actions"><button type="submit" class="btn btn-outline btn-xs">{{ thread.reply_form.submit_label }}</button></div>
+        </form>
+      {% endif %}
+    </article>
+  {% empty %}
+    <p class="empty-state">{% translate "No comments yet." %}</p>
+  {% endfor %}
+</section>

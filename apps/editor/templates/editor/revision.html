@@ -1,0 +1,30 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}#{{ revision.number }} · {{ revision.title }}{% endblock %}
+{% block main_class %}main-editor{% endblock %}
+{% block content %}
+<div class="editor-shell">
+  <header class="editor-header"><div class="editor-header-top">{% include "editor/_article_header.html" %}</div></header>
+  <div class="page">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">{% blocktranslate with number=revision.number %}Revision #{{ number }}{% endblocktranslate %}</h1>
+        <p class="page-subtitle">{{ revision.get_kind_display }} · {{ revision.author.display_name|default:"—" }} · {{ revision.created_at|date:"DATETIME_FORMAT" }}{% if revision.note %} · {{ revision.note }}{% endif %}</p>
+      </div>
+      <div class="page-actions">
+        <a class="btn btn-ghost" href="{% url 'edit:history' article.pk language %}"><i class="fa-solid fa-arrow-left"></i> {% translate "History" %}</a>
+        <form method="post" action="{% url 'edit:revision-restore' article.pk language revision.number %}">
+          {% csrf_token %}
+          <button class="btn btn-primary" type="submit"><i class="fa-solid fa-clock-rotate-left"></i> {% translate "Restore into the draft" %}</button>
+        </form>
+      </div>
+    </header>
+    <div class="card"><div class="card-body">
+      <article class="prose" lang="{{ language }}">
+        <h1>{{ revision.title }}</h1>
+        {{ rendered.html|safe }}
+      </article>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

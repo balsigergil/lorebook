@@ -1,0 +1,20 @@
+{% load portal_tags %}
+<ul class="nav-tree{% if nested %} nav-tree-nested{% endif %}">
+  {% for node in nodes %}
+    <li class="nav-tree-item">
+      {% if node.children %}
+        <details {% if node|in_path:article %}open{% endif %}>
+          <summary class="nav-tree-row">
+            <a href="{% url 'portal:article' lang current_collection.slug node.article.slug %}" class="nav-tree-link{% if article.pk == node.article.pk %} active{% endif %}"{% if article.pk == node.article.pk %} aria-current="page"{% endif %}>{{ node.title }}</a>
+            <i class="fa-solid fa-chevron-right nav-tree-chevron" aria-hidden="true"></i>
+          </summary>
+          {% include "portal/_tree.html" with nodes=node.children nested=True %}
+        </details>
+      {% else %}
+        <div class="nav-tree-row">
+          <a href="{% url 'portal:article' lang current_collection.slug node.article.slug %}" class="nav-tree-link{% if article.pk == node.article.pk %} active{% endif %}"{% if article.pk == node.article.pk %} aria-current="page"{% endif %}>{{ node.title }}</a>
+        </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

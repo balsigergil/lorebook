@@ -1,0 +1,43 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Languages" %}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Languages" %}</h1>
+      <p class="page-subtitle">{% translate "Enabled languages apply to every collection. The first one is the default language of the portals." %}</p>
+    </div>
+  </header>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead><tr><th>{% translate "Language" %}</th><th>{% translate "Code" %}</th><th>{% translate "Status" %}</th><th class="text-right">{% translate "Actions" %}</th></tr></thead>
+        <tbody>
+          {% for language in languages %}
+            <tr>
+              <td>{{ language.name }}{% if forloop.first %} <span class="tag tag-sm tag-primary">{% translate "Default" %}</span>{% endif %}</td>
+              <td><code>{{ language.code }}</code></td>
+              <td>{% if language.enabled %}<span class="tag tag-sm tag-success">{% translate "Enabled" %}</span>{% else %}<span class="tag tag-sm">{% translate "Disabled" %}</span>{% endif %}</td>
+              <td class="text-right nowrap">
+                <form method="post" action="{% url 'edit:language-update' language.pk %}" class="inline-form">
+                  {% csrf_token %}
+                  <button class="btn btn-icon btn-ghost btn-xs" name="action" value="up" aria-label="{% translate 'Move up' %}"><i class="fa-solid fa-arrow-up"></i></button>
+                  <button class="btn btn-icon btn-ghost btn-xs" name="action" value="down" aria-label="{% translate 'Move down' %}"><i class="fa-solid fa-arrow-down"></i></button>
+                  <button class="btn btn-ghost btn-xs" name="action" value="toggle">{% if language.enabled %}{% translate "Disable" %}{% else %}{% translate "Enable" %}{% endif %}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if form.fields.code.choices %}
+    <div class="card">
+      <div class="card-header"><h2 class="card-title">{% translate "Add a language" %}</h2></div>
+      <div class="card-body">{% include "core/forms/htmx_form.html" %}</div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

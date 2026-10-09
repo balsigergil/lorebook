@@ -1,0 +1,181 @@
+{% extends "editor/layout.html" %}
+{% load i18n vite core_tags %}
+{% block page_title %}{{ translation.draft_title }}{% endblock %}
+{% block head %}{% vite "assets/editor/main.tsx" %}{% endblock %}
+{% block main_class %}main-editor{% endblock %}
+{% block content %}
+<div class="editor-shell">
+  <header class="editor-header">
+    <div class="editor-header-top">
+      {% include "editor/_article_header.html" %}
+    </div>
+    <div class="editor-header-bar">
+      <div class="editor-state">
+        {% if translation.status == "draft" %}
+          <span class="tag tag-sm"><i class="fa-regular fa-file"></i> {% translate "Draft — never published" %}</span>
+        {% elif translation.status == "outdated" %}
+          <span class="tag tag-sm tag-warning"><i class="fa-solid fa-triangle-exclamation"></i> {% translate "Published — outdated" %}</span>
+        {% else %}
+          <span class="tag tag-sm tag-success"><i class="fa-solid fa-check"></i> {% translate "Published" %}</span>
+        {% endif %}
+        <span class="save-status" id="save-status" data-state="{% if translation.has_draft_changes and translation.is_published %}changed{% else %}saved{% endif %}">
+          {% if translation.has_draft_changes and translation.is_published %}{% translate "Unpublished changes" %}{% else %}{% translate "Saved" %}{% endif %}
+        </span>
+      </div>
+      <div class="editor-actions">
+        {% if can_comment %}
+          <button class="btn btn-ghost btn-sm" data-drawer="#drawer-comments"><i class="fa-regular fa-comments"></i> <span class="hide-sm">{% translate "Comments" %}</span></button>
+        {% endif %}
+        <button class="btn btn-ghost btn-sm" data-drawer="#drawer-glossary"><i class="fa-solid fa-spell-check"></i> <span class="hide-sm">{% translate "Glossary" %}</span></button>
+        <a class="btn btn-ghost btn-sm" href="{% url 'edit:history' article.pk language %}"><i class="fa-solid fa-clock-rotate-left"></i> <span class="hide-sm">{% translate "History" %}</span></a>
+        {% if translation.is_published %}
+          <a class="btn btn-ghost btn-sm" href="{% portal_url 'internal' 'portal:article' language collection.slug article.slug %}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span class="hide-sm">{% translate "View" %}</span></a>
+        {% endif %}
+        <div class="dropdown">
+          <button class="btn btn-icon btn-ghost btn-sm" data-menu-toggle aria-label="{% translate 'More actions' %}"><i class="fa-solid fa-ellipsis"></i></button>
+          <div class="menu">
+            <div class="menu-group">
+              <button type="button" class="menu-item" data-modal="#modal-settings"><i class="fa-solid fa-sliders fa-fw"></i> {% translate "Article settings" %}</button>
+              <a class="menu-item" href="{% url 'edit:export' article.pk language %}?draft=1"><i class="fa-brands fa-markdown fa-fw"></i> {% translate "Export the draft as Markdown" %}</a>
+              {% if translation.is_published %}
+                <a class="menu-item" href="{% url 'edit:export' article.pk language %}"><i class="fa-solid fa-file-export fa-fw"></i> {% translate "Export the published version" %}</a>
+              {% endif %}
+            </div>
+            {% if translation.is_published %}
+              <div class="menu-divider"></div>
+              <div class="menu-group">
+                {% if translation.has_draft_changes %}
+                  <form method="post" action="{% url 'edit:discard' article.pk language %}">{% csrf_token %}
+                    <button class="menu-item" type="submit"><i class="fa-solid fa-rotate-left fa-fw"></i> {% translate "Discard unpublished changes" %}</button>
+                  </form>
+                {% endif %}
+                <form method="post" action="{% url 'edit:unpublish' article.pk language %}">{% csrf_token %}
+                  <button class="menu-item" type="submit"><i class="fa-solid fa-eye-slash fa-fw"></i> {% translate "Unpublish this language" %}</button>
+                </form>
+              </div>
+            {% endif %}
+            <div class="menu-divider"></div>
+            <div class="menu-group">
+              <button type="button" class="menu-item menu-item-danger" data-modal="#modal-delete"><i class="fa-solid fa-trash fa-fw"></i> {% translate "Delete the article" %}</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" data-modal="#modal-publish" id="publish-button"><i class="fa-solid fa-paper-plane"></i> {% translate "Publish" %}</button>
+      </div>
+    </div>
+  </header>
+
+  {% if translation.is_outdated %}
+    <div class="alert alert-warning editor-alert">
+      <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="alert-content">
+        <div class="alert-title">{% translate "This version is outdated" %}</div>
+        <div class="alert-text">{% translate "Another language was updated since this version was published. Bring it up to date, then publish it as synchronised." %}</div>
+      </div>
+    </div>
+  {% endif %}
+  {% if inherited_restrictions or article.read_groups.exists %}
+    <div class="alert editor-alert">
+      <div class="alert-icon"><i class="fa-solid fa-lock"></i></div>
+      <div class="alert-content"><div class="alert-text">
+        {% translate "Reading is restricted to some groups" %}:
+        {% for group in article.read_groups.all %}<span class="tag tag-sm">{{ group.name }}</span> {% endfor %}
+        {% for ancestor, groups in inherited_restrictions %}
+          {% for group in groups %}<span class="tag tag-sm" title="{% translate 'Inherited' %}"><i class="fa-solid fa-turn-down"></i> {{ group.name }}</span> {% endfor %}
+        {% endfor %}
+      </div></div>
+    </div>
+  {% endif %}
+
+  <div class="editor-body" lang="{{ language }}">
+    <div id="editor-root" data-props="editor-props">
+      <div class="editor-loading"><div class="spinner"></div></div>
+    </div>
+    {{ editor_props|json_script:"editor-props" }}
+  </div>
+</div>
+
+<div class="modal" id="modal-publish" aria-labelledby="modal-publish-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-publish-title">{% blocktranslate with language=language_name %}Publish the {{ language }} version{% endblocktranslate %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-light mb-4">{% translate "Readers will see this version right away. The previous one is kept in the history." %}</p>
+      {% include "core/forms/htmx_form.html" with form=publish_form in_modal=True %}
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-settings" aria-labelledby="modal-settings-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-settings-title">{% translate "Article settings" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-light mb-4">{% translate "These settings apply to every language of the article." %}</p>
+      {% url 'edit:editor' article.pk language as editor_url %}
+      {% include "core/forms/htmx_form.html" with form=settings_form in_modal=True next_url=editor_url %}
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-delete" aria-labelledby="modal-delete-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-delete-title">{% translate "Delete the article?" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p>{% translate "Every language, revision and comment of this article is deleted, along with its sub-articles. This cannot be undone." %}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" data-modal-close>{% translate "Cancel" %}</button>
+      <form method="post" action="{% url 'edit:article-delete' article.pk %}">{% csrf_token %}
+        <button type="submit" class="btn btn-danger">{% translate "Delete" %}</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if can_comment %}
+<div class="drawer" id="drawer-comments" aria-labelledby="drawer-comments-title" aria-hidden="true">
+  <div class="drawer-content drawer-md">
+    <div class="drawer-header">
+      <h3 class="drawer-title" id="drawer-comments-title">{% translate "Comments" %} · {{ language_name }}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-drawer-close><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body">
+      <div hx-get="{% url 'comments:panel' translation.pk %}" hx-trigger="load" hx-swap="outerHTML"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="drawer" id="drawer-glossary" aria-labelledby="drawer-glossary-title" aria-hidden="true">
+  <div class="drawer-content drawer-lg">
+    <div class="drawer-header">
+      <h3 class="drawer-title" id="drawer-glossary-title">{% translate "Glossary" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-drawer-close><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body">
+      <input type="search" class="input mb-4" placeholder="{% translate 'Filter…' %}" data-filter-table="#glossary-table">
+      <div class="table-responsive">
+        <table class="table table-compact" id="glossary-table">
+          <thead><tr>{% for language_obj in glossary_languages %}<th{% if language_obj.code == language %} class="highlight-column"{% endif %}>{{ language_obj.code|upper }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {% for row in glossary %}
+              <tr>{% for value in row %}<td>{{ value|default:"—" }}</td>{% endfor %}</tr>
+            {% empty %}
+              <tr><td colspan="{{ glossary_languages|length }}" class="text-light">{% translate "The glossary is empty." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <a href="{% url 'edit:glossary' %}" class="btn btn-ghost btn-sm mt-4">{% translate "Manage the glossary" %} <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
+{% endblock %}

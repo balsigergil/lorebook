@@ -1,0 +1,49 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Permissions" %} · {{ collection.name }}{% endblock %}
+{% block content %}
+<div class="page">
+  {% include "editor/_collection_header.html" with can_admin=True tab="permissions" %}
+  <div class="page-narrow">
+    <div class="alert alert-primary mb-4">
+      <div class="alert-icon"><i class="fa-solid fa-circle-info"></i></div>
+      <div class="alert-content">
+        <div class="alert-text">
+          {% translate "Readers read the collection on the internal portal and comment. Editors also write, publish, translate and restore revisions. Admins also manage permissions and visibility." %}
+          {% if collection.is_public %}{% translate "This collection is public: anyone can read it on the public portal." %}{% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h2 class="card-title">{% translate "Groups with access" %}</h2></div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead><tr><th>{% translate "Group" %}</th><th>{% translate "Role" %}</th><th></th></tr></thead>
+          <tbody>
+            {% for role in roles %}
+              <tr>
+                <td><i class="fa-solid fa-users text-light"></i> {{ role.group.name }}</td>
+                <td><span class="tag tag-sm{% if role.role == 'admin' %} tag-danger{% elif role.role == 'editor' %} tag-primary{% endif %}">{{ role.get_role_display }}</span></td>
+                <td class="text-right">
+                  <form method="post" action="{% url 'edit:collection-role-delete' collection.slug role.pk %}" class="inline-form">
+                    {% csrf_token %}
+                    <button class="btn btn-ghost btn-xs" type="submit"><i class="fa-solid fa-xmark"></i> {% translate "Remove" %}</button>
+                  </form>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="3" class="text-light">{% translate "Only instance administrators can access this collection." %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h2 class="card-title">{% translate "Grant a role" %}</h2>
+        <div class="card-description">{% translate "Granting a role to a group that already has one replaces it." %}</div>
+      </div>
+      <div class="card-body">{% include "core/forms/htmx_form.html" %}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

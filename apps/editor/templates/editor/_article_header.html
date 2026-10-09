@@ -1,0 +1,18 @@
+{% load i18n %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'edit:collection' collection.slug %}"><i class="fa-solid fa-{{ collection.icon|default:'book' }}"></i> {{ collection.name }}</a></li>
+    {% for ancestor, ancestor_translation in breadcrumbs %}
+      <li class="breadcrumb-item breadcrumb-separator"><i class="fas fa-angle-right"></i></li>
+      <li class="breadcrumb-item"><a href="{% url 'edit:editor' ancestor.pk language %}">{% if ancestor_translation %}{{ ancestor_translation.display_title }}{% else %}{{ ancestor.slug }}{% endif %}</a></li>
+    {% endfor %}
+  </ol>
+</nav>
+<div class="language-tabs" role="tablist" aria-label="{% translate 'Languages' %}">
+  {% for language_obj, item in languages %}
+    <a role="tab" href="{% url 'edit:editor' article.pk language_obj.code %}" class="language-tab{% if language_obj.code == language %} active{% endif %}" aria-selected="{% if language_obj.code == language %}true{% else %}false{% endif %}">
+      {% include "editor/_status.html" with translation=item code=language_obj.code %}
+      <span class="language-tab-name">{{ language_obj.name }}</span>
+    </a>
+  {% endfor %}
+</div>

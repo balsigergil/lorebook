@@ -1,0 +1,86 @@
+{% extends "portal/_with_sidebar.html" %}
+{% load i18n core_tags %}
+{% block title %}{{ translation.title }} · {{ current_collection.name }} · {{ site.site_name }}{% endblock %}
+{% block meta %}{{ block.super }}
+  <meta name="description" content="{{ translation.text|truncatechars:160 }}">
+  <meta property="og:title" content="{{ translation.title }}">
+  <meta property="og:type" content="article">
+{% endblock %}
+{% block content %}
+<div class="article-container">
+  <nav aria-label="breadcrumb" class="article-breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'portal:collection' lang current_collection.slug %}">{{ current_collection.name }}</a></li>
+      {% for ancestor, ancestor_translation in breadcrumbs %}
+        <li class="breadcrumb-item breadcrumb-separator"><i class="fas fa-angle-right"></i></li>
+        <li class="breadcrumb-item"><a href="{% url 'portal:article' lang current_collection.slug ancestor.slug %}">{{ ancestor_translation.title }}</a></li>
+      {% endfor %}
+    </ol>
+  </nav>
+
+  {% if situation == "outdated" %}
+    <div class="alert alert-warning language-banner" role="status">
+      <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="alert-content">
+        <div class="alert-text">
+          {% translate "This version is not up to date." %}
+          {% if up_to_date %}
+            <a href="{% url 'portal:article' up_to_date.language current_collection.slug article.slug %}" hreflang="{{ up_to_date.language }}">{% blocktranslate with language=up_to_date.language|upper %}Read the most recent version ({{ language }}){% endblocktranslate %}</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% elif situation == "missing" %}
+    <div class="alert alert-primary language-banner" role="status">
+      <div class="alert-icon"><i class="fa-solid fa-language"></i></div>
+      <div class="alert-content">
+        <div class="alert-text">{% blocktranslate with language=lang_name shown=content_lang_name %}Not yet available in {{ language }}. Showing the {{ shown }} version.{% endblocktranslate %}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  <article class="prose" lang="{{ translation.language }}">
+    <header class="article-header">
+      <h1 class="article-title">{{ translation.title }}</h1>
+      <div class="article-meta">
+        <span><i class="fa-regular fa-clock"></i> {% blocktranslate with date=translation.published_at|date:"DATE_FORMAT" %}Updated on {{ date }}{% endblocktranslate %}</span>
+        {% if can_edit %}<a class="btn btn-ghost btn-xs" href="{% portal_url 'edit' 'edit:editor' article.pk translation.language %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a>{% endif %}
+      </div>
+    </header>
+    {{ translation.html|safe }}
+  </article>
+
+  <nav class="pager" aria-label="{% translate 'Pages' %}">
+    {% if previous_node %}
+      <a class="pager-link pager-previous" href="{% url 'portal:article' lang current_collection.slug previous_node.article.slug %}">
+        <span class="pager-label"><i class="fa-solid fa-arrow-left"></i> {% translate "Previous" %}</span>
+        <span class="pager-title">{{ previous_node.title }}</span>
+      </a>
+    {% else %}<span></span>{% endif %}
+    {% if next_node %}
+      <a class="pager-link pager-next" href="{% url 'portal:article' lang current_collection.slug next_node.article.slug %}">
+        <span class="pager-label">{% translate "Next" %} <i class="fa-solid fa-arrow-right"></i></span>
+        <span class="pager-title">{{ next_node.title }}</span>
+      </a>
+    {% endif %}
+  </nav>
+
+  {% if can_comment %}
+    <div hx-get="{% url 'comments:panel' translation.pk %}" hx-trigger="revealed" hx-swap="outerHTML" class="comments-placeholder">
+      <div class="spinner"></div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+{% block aside %}
+  {% if translation.toc %}
+    <aside class="reader-toc" aria-label="{% translate 'On this page' %}">
+      <p class="reader-toc-title">{% translate "On this page" %}</p>
+      <ul>
+        {% for entry in translation.toc %}
+          <li class="toc-level-{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </aside>
+  {% endif %}
+{% endblock %}

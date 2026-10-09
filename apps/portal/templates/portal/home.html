@@ -1,0 +1,58 @@
+{% extends "portal/layout.html" %}
+{% load i18n %}
+{% block title %}{{ site.site_name }}{% endblock %}
+{% block reader_body %}
+<main class="reader-home" id="main">
+  <section class="hero">
+    <h1 class="hero-title">{% if is_internal %}{% translate "Knowledge base" %}{% else %}{{ site.site_name }}{% endif %}</h1>
+    <p class="hero-subtitle">{% if site.tagline %}{{ site.tagline }}{% else %}{% translate "Find the answers you are looking for." %}{% endif %}</p>
+    <form class="hero-search" method="get" action="{% url 'portal:search' lang %}" role="search">
+      <div class="input-icon">
+        <span class="input-icon-addon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="search" name="q" class="input input-lg" placeholder="{% translate 'Search the documentation…' %}" aria-label="{% translate 'Search' %}">
+      </div>
+    </form>
+  </section>
+
+  <section class="home-section">
+    <h2 class="home-section-title">{% translate "Collections" %}</h2>
+    <div class="card-grid">
+      {% for collection in collection_cards %}
+        <a class="card collection-card" href="{% url 'portal:collection' lang collection.slug %}">
+          <div class="card-body">
+            <div class="collection-card-icon"><i class="fa-solid fa-{{ collection.icon|default:'book' }}"></i></div>
+            <h3 class="collection-card-title">{{ collection.name }}</h3>
+            <p class="collection-card-text">{{ collection.description|truncatechars:140 }}</p>
+            {% if is_internal %}
+              <div class="collection-card-meta">{% if collection.is_public %}<span class="tag tag-sm tag-success"><i class="fa-solid fa-globe"></i> {% translate "Public" %}</span>{% else %}<span class="tag tag-sm"><i class="fa-solid fa-lock"></i> {% translate "Internal" %}</span>{% endif %}</div>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty-state">
+          <i class="fa-regular fa-folder-open"></i>
+          <p>{% translate "Nothing to read here yet." %}</p>
+          {% if not user.is_authenticated %}<a class="btn btn-outline" href="{% url 'account_login' %}?next={{ portal_links.internal|urlencode }}">{% translate "Sign in to read the internal documentation" %}</a>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if popular %}
+    <section class="home-section">
+      <h2 class="home-section-title"><i class="fa-solid fa-fire"></i> {% translate "Most read" %}</h2>
+      <div class="popular-list">
+        {% for item in popular %}
+          <a class="popular-item" href="{% url 'portal:article' lang item.article.collection.slug item.article.slug %}">
+            <span class="popular-rank">{{ forloop.counter }}</span>
+            <span class="popular-body">
+              <span class="popular-title">{{ item.translation.title }}</span>
+              <span class="popular-meta">{{ item.article.collection.name }}</span>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</main>
+{% endblock %}

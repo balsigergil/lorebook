@@ -1,0 +1,17 @@
+{% if form.non_field_errors %}
+  <div class="alert alert-danger form-errors" role="alert">
+    <div class="alert-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+    <div class="alert-content">
+      {% for error in form.non_field_errors %}<div class="alert-text">{{ error }}</div>{% endfor %}
+    </div>
+  </div>
+{% endif %}
+{% for field in form.hidden_fields %}
+  {{ field }}
+  {% for error in field.errors %}<p class="field-text-danger">{{ field.label }}: {{ error }}</p>{% endfor %}
+{% endfor %}
+<div class="form-fields">
+  {% for field in form.visible_fields %}
+    {{ field.as_field_group }}
+  {% endfor %}
+</div>

@@ -1,24 +1,16 @@
-"""
-URL configuration for lorebook project.
+"""Default routing: the three interfaces share one domain under path prefixes.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+An interface with its own domain is served by lorebook.urls_<interface>
+instead (see apps.core.middleware.PortalHostMiddleware).
 """
 
-from django.contrib import admin
 from django.urls import include, path
 
+from .urls_shared import urlpatterns as shared
+
 urlpatterns = [
-    path("", include("apps.core.urls")),
-    path("admin/", admin.site.urls),
+    *shared,
+    path("internal/", include("apps.portal.urls", namespace="internal")),
+    path("edit/", include("apps.editor.urls", namespace="edit")),
+    path("", include("apps.portal.urls", namespace="public")),
 ]

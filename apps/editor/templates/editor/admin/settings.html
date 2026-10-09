@@ -1,0 +1,14 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Settings" %}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Settings" %}</h1>
+      <p class="page-subtitle">{% translate "By default the public portal is served at /, the internal portal at /internal and the editor at /edit. Give an interface its own domain to serve it at the root of that domain." %}</p>
+    </div>
+  </header>
+  <div class="card"><div class="card-body">{% include "core/forms/htmx_form.html" %}</div></div>
+</div>
+{% endblock %}

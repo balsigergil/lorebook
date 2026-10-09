@@ -1,0 +1,66 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Users" %}{% endblock %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Users" %}</h1>
+      <p class="page-subtitle">{% translate "Local accounts are created by invitation. People signing in with SSO need an invitation too, unless open sign-up is enabled for SSO." %}</p>
+    </div>
+    <button class="btn btn-primary" data-modal="#modal-invite"><i class="fa-solid fa-envelope"></i> {% translate "Invite" %}</button>
+  </header>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead><tr><th>{% translate "Name" %}</th><th>{% translate "Email" %}</th><th>{% translate "Groups" %}</th><th>{% translate "Status" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for member in users %}
+            <tr>
+              <td>{{ member.full_name|default:"—" }}</td>
+              <td>{{ member.email }}</td>
+              <td>{% for group in member.groups.all %}<span class="tag tag-sm">{{ group.name }}</span> {% endfor %}</td>
+              <td>
+                {% if not member.is_active %}<span class="tag tag-sm">{% translate "Deactivated" %}</span>
+                {% elif member.is_superuser %}<span class="tag tag-sm tag-danger">{% translate "Administrator" %}</span>
+                {% else %}<span class="tag tag-sm tag-success">{% translate "Active" %}</span>{% endif %}
+              </td>
+              <td class="text-right"><a class="btn btn-ghost btn-xs" href="{% url 'edit:user' member.pk %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if invitations %}
+    <section class="section">
+      <h2 class="section-title">{% translate "Pending invitations" %}</h2>
+      <div class="card">
+        <ul class="list">
+          {% for invitation in invitations %}
+            <li class="list-item">
+              <span>{{ invitation.email }}{% if invitation.is_expired %} <span class="tag tag-sm tag-warning">{% translate "Expired" %}</span>{% endif %}</span>
+              <span class="list-meta">
+                {% blocktranslate with name=invitation.invited_by.display_name|default:"—" since=invitation.created_at|timesince %}by {{ name }}, {{ since }} ago{% endblocktranslate %}
+                <form method="post" action="{% url 'edit:invitation-action' invitation.pk %}" class="inline-form">{% csrf_token %}
+                  {% if not invitation.is_expired %}<button class="btn btn-ghost btn-xs" name="action" value="resend">{% translate "Resend" %}</button>{% endif %}
+                  <button class="btn btn-ghost btn-xs" name="action" value="cancel">{% translate "Cancel" %}</button>
+                </form>
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+  {% endif %}
+</div>
+<div class="modal" id="modal-invite" aria-labelledby="modal-invite-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-invite-title">{% translate "Invite someone" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">{% include "core/forms/htmx_form.html" with in_modal=True %}</div>
+  </div>
+</div>
+{% endblock %}
