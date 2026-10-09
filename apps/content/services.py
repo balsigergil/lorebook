@@ -317,7 +317,7 @@ def translations_for_display(
     """For each article, the translation used for its title in navigation."""
     grouped: dict[int, list[ArticleTranslation]] = {}
     queryset = ArticleTranslation.objects.filter(article__in=articles).defer(
-        "draft_content", "content", "html", "text", "search_vector"
+        "draft_content", "content", "html", "search_vector"
     )
     if published_only:
         queryset = queryset.published()

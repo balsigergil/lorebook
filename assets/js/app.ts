@@ -44,8 +44,8 @@ function csrfToken(): string {
 
 // Django's CSRF protection for every htmx request.
 document.addEventListener("htmx:config:request", (event) => {
-  const detail = (event as CustomEvent).detail;
-  detail.ctx.request.headers["X-CSRFToken"] = csrfToken();
+  const token = csrfToken();
+  if (token) (event as CustomEvent).detail.ctx.request.headers["X-CSRFToken"] = token;
 });
 
 Alpine.start();

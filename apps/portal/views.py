@@ -7,6 +7,7 @@ instance namespace the URL was resolved in.
 
 from functools import wraps
 
+from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -33,30 +34,25 @@ def current_portal(request) -> str:
 
 
 def reader_view(view):
-    """Resolve the portal and the reader's language, and guard the internal portal."""
+    """Resolve the portal and the reader's language, and guard the internal portal.
+
+    The interface switches to the content language when it is translated.
+    """
 
     @wraps(view)
-    def wrapper(request, *args, lang=None, **kwargs):
+    def wrapper(request, *args, lang, **kwargs):
         portal = current_portal(request)
         if portal == access.INTERNAL and not access.is_authenticated(request.user):
             return redirect_to_login(request.get_full_path())
-        if lang is not None and not i18n.is_enabled(lang):
+        if not i18n.is_enabled(lang):
             raise Http404
         request.portal = portal
-        if lang is not None:
-            request.content_language = lang
-            if lang in dict(_ui_languages()):
-                ui_translation.activate(lang)
-                request.LANGUAGE_CODE = lang
-        return view(request, *args, lang=lang, **kwargs) if lang else view(request, *args, **kwargs)
+        if lang in dict(settings.LANGUAGES):
+            ui_translation.activate(lang)
+            request.LANGUAGE_CODE = lang
+        return view(request, *args, lang=lang, **kwargs)
 
     return wrapper
-
-
-def _ui_languages():
-    from django.conf import settings
-
-    return settings.LANGUAGES
 
 
 def portal_context(request, lang: str, collection: Collection | None = None) -> dict:

@@ -1,0 +1,14 @@
+{% extends "core/auth_layout.html" %}
+{% load i18n %}
+{% block title %}{% translate "Page not found" %} · {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+  <div class="error-page">
+    <span class="error-code">404</span>
+    <h1 class="auth-title">{% translate "Page not found" %}</h1>
+    <p class="auth-subtitle">{% translate "This page does not exist, or you are not allowed to read it." %}</p>
+    <div class="form-actions">
+      {% if not user.is_authenticated %}<a class="btn btn-outline" href="{% url 'account_login' %}?next={{ request.get_full_path|urlencode }}">{% translate "Sign in" %}</a>{% endif %}
+      <a class="btn btn-primary" href="{{ portal_links.public }}">{% translate "Back to the documentation" %}</a>
+    </div>
+  </div>
+{% endblock %}

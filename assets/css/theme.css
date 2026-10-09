@@ -1606,3 +1606,16 @@ details[open] > summary .nav-tree-chevron {
 .search-form .form-fields {
   gap: 0;
 }
+
+.error-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.error-code {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--lb-accent);
+}

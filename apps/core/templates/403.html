@@ -1,0 +1,13 @@
+{% extends "core/auth_layout.html" %}
+{% load i18n %}
+{% block title %}{% translate "Access denied" %} · {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+  <div class="error-page">
+    <span class="error-code">403</span>
+    <h1 class="auth-title">{% translate "Access denied" %}</h1>
+    <p class="auth-subtitle">{% translate "You do not have the rights needed for this page. Ask an administrator if you think you should." %}</p>
+    <div class="form-actions">
+      <a class="btn btn-primary" href="{{ portal_links.internal }}">{% translate "Back to the documentation" %}</a>
+    </div>
+  </div>
+{% endblock %}

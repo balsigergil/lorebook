@@ -145,3 +145,9 @@ def test_anonymous_readers_get_no_cookie(client, published):
     ]:
         response = client.get(url, HTTP_USER_AGENT=BROWSER)
         assert not response.cookies, (url, response.cookies)
+
+
+def test_styled_404(client, db):
+    response = client.get(public_url("collection", "fr", "nope"))
+    assert response.status_code == 404
+    assert "error-page" in response.content.decode()

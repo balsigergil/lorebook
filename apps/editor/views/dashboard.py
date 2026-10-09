@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
@@ -39,9 +40,15 @@ def dashboard(request):
         .defer("draft_content", "content", "html", "text", "search_vector")
     }
     popular = [(titles[pk], views) for pk, views in top if pk in titles]
+    counts = dict(
+        Article.objects.filter(collection__in=collections)
+        .values_list("collection_id")
+        .annotate(total=Count("id"))
+        .values_list("collection_id", "total")
+    )
     context = {
         **sidebar_context(request),
-        "collections": [(collection, collection.articles.count()) for collection in collections],
+        "collections": [(collection, counts.get(collection.pk, 0)) for collection in collections],
         "drafts": drafts,
         "outdated": outdated,
         "popular": popular,
