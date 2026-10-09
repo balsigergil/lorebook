@@ -1,0 +1,33 @@
+{
+  "name": "lorebook",
+  "version": "0.0.1",
+  "author": "Gil Balsiger",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module",
+    "maintained node versions"
+  ],
+  "devDependencies": {
+    "@alpinejs/focus": "^3.17.4",
+    "@floating-ui/dom": "^1.8.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/alpinejs": "^3.17.0",
+    "alpinejs": "^3.17.4",
+    "bloum": "^0.20.1",
+    "focus-trap": "^8.2.2",
+    "htmx.org": "^4.0.0",
+    "postcss": "^8.5.28",
+    "postcss-import": "^17.0.0",
+    "postcss-preset-env": "^11.6.0",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
+  }
+}
