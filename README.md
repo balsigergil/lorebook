@@ -72,6 +72,22 @@ uv run manage.py generate_api_client --check
 npm run typecheck && npm run build
 ```
 
+### Translations
+
+The interface is written in English and translated into French, German and Italian
+(`locale/`). The compiled `.mo` files are committed, so building the image needs no gettext.
+
+```bash
+uv run manage.py makemessages -l fr -l de -l it --ignore=.venv --ignore=node_modules \
+  --ignore=dist --ignore=static --ignore=tests --no-location
+# translate the new entries in locale/*/LC_MESSAGES/django.po, then
+uv run manage.py compilemessages --ignore=.venv
+```
+
+The interface follows the browser's language in the editor, and the content language on the
+portals. The React editor gets its strings from Django (`editor_strings()` in
+`apps/editor/views/articles.py`).
+
 ### Architecture
 
 A Django monolith (ASGI) rendering every page on the server with Django templates, htmx and the
