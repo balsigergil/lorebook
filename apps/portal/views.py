@@ -12,6 +12,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import translation as ui_translation
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
 from apps.access import services as access
@@ -20,6 +21,7 @@ from apps.comments.services import can_comment
 from apps.content import services as content
 from apps.content.models import Article, ArticleTranslation, Collection
 from apps.content.rendering import excerpt
+from apps.core.forms import SearchForm
 from apps.core.views import is_htmx
 from apps.i18n import services as i18n
 from apps.search import services as search_service
@@ -60,6 +62,7 @@ def _ui_languages():
 def portal_context(request, lang: str, collection: Collection | None = None) -> dict:
     portal = request.portal
     return {
+        "search_form": SearchForm(request.GET or None, auto_id="header_%s"),
         "portal": portal,
         "is_internal": portal == access.INTERNAL,
         "lang": lang,
@@ -120,7 +123,12 @@ def home(request, lang):
             if article and translation:
                 popular.append({"article": article, "translation": translation, "views": views})
 
-    context.update({"collection_cards": collection_cards, "popular": popular})
+    hero_search = SearchForm(
+        auto_id="hero_%s", placeholder=_("Search the documentation…"), size="lg"
+    )
+    context.update(
+        {"collection_cards": collection_cards, "popular": popular, "hero_search": hero_search}
+    )
     return render(request, "portal/home.html", context)
 
 
@@ -204,7 +212,19 @@ def article(request, lang, collection, article):
 @require_GET
 @reader_view
 def search(request, lang):
-    query = request.GET.get("q", "").strip()[:200]
+    form = SearchForm(request.GET or None, placeholder=_("Search the documentation…"), size="lg")
+    query = form.cleaned_data["q"].strip() if form.is_valid() else ""
+    search_url = reverse("portal:search", kwargs={"lang": lang}, current_app=request.portal)
+    form.fields["q"].widget.attrs.update(
+        {
+            "autofocus": True,
+            "hx-get": search_url,
+            "hx-trigger": "input changed delay:300ms, search",
+            "hx-target": "#search-results",
+            "hx-swap": "outerHTML",
+            "hx-push-url": "true",
+        }
+    )
     context = portal_context(request, lang)
     results = []
     if query:
@@ -217,7 +237,7 @@ def search(request, lang):
             article = articles.get(hit.article_id)
             if article is not None:
                 results.append({"hit": hit, "article": article})
-    context.update({"query": query, "results": results})
+    context.update({"query": query, "results": results, "form": form})
     if is_htmx(request) and request.headers.get("HX-Request-Type") == "partial":
         return render(request, "portal/search.html#results", context)
     return render(request, "portal/search.html", context)

@@ -12,7 +12,11 @@ def send_invitation_email(invitation_id: int, accept_url: str) -> None:
     invitation = Invitation.objects.select_related("invited_by").filter(pk=invitation_id).first()
     if invitation is None or not invitation.is_pending:
         return
-    context = {"invitation": invitation, "accept_url": accept_url, "site": SiteSettings.load()}
+    context = {
+        "invitation": invitation,
+        "accept_url": accept_url,
+        "site_settings": SiteSettings.load(),
+    }
     send_mail(
         subject=render_to_string("access/email/invitation_subject.txt", context).strip(),
         message=render_to_string("access/email/invitation.txt", context),

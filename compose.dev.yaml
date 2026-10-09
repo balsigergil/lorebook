@@ -1,0 +1,24 @@
+# Services for local development: PostgreSQL and Mailpit (http://localhost:8025).
+#   docker compose -f compose.dev.yaml up -d
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lorebook}
+      POSTGRES_USER: ${DB_USER:-lorebook}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-lorebook}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "${EMAIL_PORT:-1025}:1025"
+      - "8025:8025"
+
+volumes:
+  postgres_data:

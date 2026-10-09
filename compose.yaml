@@ -1,31 +1,51 @@
+# Production-like deployment: web (ASGI), worker (same image) and PostgreSQL.
+#   cp .env.example .env   # then set DJANGO_SECRET_KEY, hosts, email…
+#   docker compose up -d
+#   docker compose exec web python manage.py createsuperuser
+
+x-lorebook: &lorebook
+  build: .
+  image: lorebook:latest
+  restart: unless-stopped
+  env_file: .env
+  environment:
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    LOREBOOK_MEDIA_ROOT: /app/uploads
+  volumes:
+    - uploads:/app/uploads
+  depends_on:
+    postgres:
+      condition: service_healthy
+
 services:
-  db:
+  web:
+    <<: *lorebook
+    command: web
+    ports:
+      - "${LOREBOOK_PORT:-8000}:8000"
+
+  worker:
+    <<: *lorebook
+    command: worker
+    healthcheck:
+      disable: true
+
+  postgres:
     image: postgres:18-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-lorebook}
       POSTGRES_USER: ${DB_USER:-lorebook}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-lorebook}
-    ports:
-      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
-
-  redis:
-    image: redis:8-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
-  mailpit:
-    image: axllent/mailpit:latest
-    restart: unless-stopped
-    ports:
-      - "${EMAIL_PORT:-1025}:1025"
-      - "8025:8025"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-lorebook} -d ${DB_NAME:-lorebook}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres_data:
-  redis_data:
+  uploads:

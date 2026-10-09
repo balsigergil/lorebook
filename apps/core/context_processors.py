@@ -9,7 +9,7 @@ from .portals import EDIT, INTERNAL, PUBLIC, portal_home
 
 def lorebook(request):
     return {
-        "site": SimpleLazyObject(SiteSettings.load),
+        "site_settings": SimpleLazyObject(SiteSettings.load),
         "content_languages": SimpleLazyObject(enabled_languages),
         "default_content_language": SimpleLazyObject(default_language),
         "portal_links": SimpleLazyObject(

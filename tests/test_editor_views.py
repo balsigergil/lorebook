@@ -239,3 +239,25 @@ def test_language_toggle_keeps_one(client, admin_user):
     french = Language.objects.get(code="fr")
     client.post(reverse("edit:language-update", args=[french.pk]), {"action": "toggle"})
     assert Language.objects.get(code="fr").enabled
+
+
+def test_delete_collection_requires_confirmation(client, admin_user, private_collection):
+    client.force_login(admin_user)
+    url = reverse("edit:collection-delete", args=["handbook"])
+    response = client.post(url, {"delete-confirm": "nope"}, **HX)
+    assert response.status_code == 422
+    assert Collection.objects.filter(slug="handbook").exists()
+    response = client.post(url, {"delete-confirm": "handbook"}, **HX)
+    assert response.status_code == 200
+    assert not Collection.objects.filter(slug="handbook").exists()
+
+
+def test_seed_demo(db):
+    from django.core.management import call_command
+
+    call_command("seed_demo", admin_password="demo-pass")
+    collection = Collection.objects.get(slug="guide")
+    assert collection.is_public
+    assert (
+        ArticleTranslation.objects.published().filter(article__collection=collection).count() == 4
+    )

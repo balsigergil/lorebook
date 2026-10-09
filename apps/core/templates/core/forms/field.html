@@ -26,7 +26,16 @@
         {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
       </label>
     {% endif %}
-    {% lore_widget field %}
+    {% with icon=field.field.widget.attrs|get_item:"data-icon" %}
+      {% if icon %}
+        <div class="input-icon">
+          <span class="input-icon-addon"><i class="fa-solid fa-{{ icon }}"></i></span>
+          {% lore_widget field %}
+        </div>
+      {% else %}
+        {% lore_widget field %}
+      {% endif %}
+    {% endwith %}
   {% endif %}
   {% if field.help_text %}
     <p class="field-text-help">{{ field.help_text|safe }}</p>

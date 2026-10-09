@@ -950,6 +950,11 @@ main.main.main-editor {
   border-radius: var(--bl-border-radius-full);
 }
 
+.reader-search .input-icon,
+.hero-search .input-icon {
+  width: 100%;
+}
+
 .reader-header-right {
   display: flex;
   align-items: center;
@@ -1438,6 +1443,7 @@ details[open] > summary .nav-tree-chevron {
     left: 0;
     bottom: 0;
     width: min(20rem, 85vw);
+    height: calc(100vh - var(--lb-header-height));
     max-height: none;
     background: var(--lb-surface);
     border-right: 1px solid var(--lb-border);
@@ -1591,4 +1597,12 @@ details[open] > summary .nav-tree-chevron {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.search-form .field {
+  margin: 0;
+}
+
+.search-form .form-fields {
+  gap: 0;
 }

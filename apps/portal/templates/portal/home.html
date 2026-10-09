@@ -1,16 +1,13 @@
 {% extends "portal/layout.html" %}
 {% load i18n %}
-{% block title %}{{ site.site_name }}{% endblock %}
+{% block title %}{{ site_settings.site_name }}{% endblock %}
 {% block reader_body %}
 <main class="reader-home" id="main">
   <section class="hero">
-    <h1 class="hero-title">{% if is_internal %}{% translate "Knowledge base" %}{% else %}{{ site.site_name }}{% endif %}</h1>
-    <p class="hero-subtitle">{% if site.tagline %}{{ site.tagline }}{% else %}{% translate "Find the answers you are looking for." %}{% endif %}</p>
-    <form class="hero-search" method="get" action="{% url 'portal:search' lang %}" role="search">
-      <div class="input-icon">
-        <span class="input-icon-addon"><i class="fa-solid fa-magnifying-glass"></i></span>
-        <input type="search" name="q" class="input input-lg" placeholder="{% translate 'Search the documentation…' %}" aria-label="{% translate 'Search' %}">
-      </div>
+    <h1 class="hero-title">{% if is_internal %}{% translate "Knowledge base" %}{% else %}{{ site_settings.site_name }}{% endif %}</h1>
+    <p class="hero-subtitle">{% if site_settings.tagline %}{{ site_settings.tagline }}{% else %}{% translate "Find the answers you are looking for." %}{% endif %}</p>
+    <form class="hero-search search-form" method="get" action="{% url 'portal:search' lang %}" role="search">
+      {{ hero_search }}
     </form>
   </section>
 

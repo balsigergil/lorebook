@@ -52,7 +52,8 @@ coverage.xml
 cover/
 
 # Translations
-*.mo
+# Compiled translations are committed (no gettext needed to build the image).
+# *.mo
 *.pot
 
 # Django stuff:

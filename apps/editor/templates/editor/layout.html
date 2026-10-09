@@ -1,6 +1,6 @@
 {% extends "core/base.html" %}
 {% load i18n %}
-{% block title %}{% block page_title %}{% translate "Editor" %}{% endblock %} · {{ site.site_name }}{% endblock %}
+{% block title %}{% block page_title %}{% translate "Editor" %}{% endblock %} · {{ site_settings.site_name }}{% endblock %}
 {% block body %}
 <div class="app editor-app">
   <aside class="sidebar" id="main-sidebar">
@@ -8,7 +8,7 @@
       <div class="sidebar-top">
         <a class="sidebar-brand editor-brand" href="{% url 'edit:dashboard' %}">
           <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
-          <span>{{ site.site_name }}</span>
+          <span>{{ site_settings.site_name }}</span>
         </a>
         <ul class="sidebar-nav">
           <li class="sidebar-item{% if nav == 'dashboard' %} active{% endif %}">

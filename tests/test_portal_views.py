@@ -128,9 +128,20 @@ def test_search_page(client, public_collection, django_capture_on_commit_callbac
 def test_most_read_on_home(client, published):
     client.get(public_url("article", "fr", "docs", published.article.slug), HTTP_USER_AGENT=BROWSER)
     response = client.get(public_url("home-lang", "fr"))
-    assert "Most read" in response.content.decode()
+    assert "popular-list" in response.content.decode()
 
 
 @pytest.mark.parametrize("path", ["/healthz", "/accounts/login/"])
 def test_misc_pages(client, db, path):
     assert client.get(path).status_code == 200
+
+
+def test_anonymous_readers_get_no_cookie(client, published):
+    for url in [
+        "/",
+        public_url("home-lang", "fr"),
+        public_url("article", "fr", "docs", published.article.slug),
+        public_url("search", "fr") + "?q=guide",
+    ]:
+        response = client.get(url, HTTP_USER_AGENT=BROWSER)
+        assert not response.cookies, (url, response.cookies)

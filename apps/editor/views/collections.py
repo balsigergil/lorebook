@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
@@ -11,6 +11,7 @@ from apps.access.models import CollectionRole
 from apps.content import markdown
 from apps.content import services as content
 from apps.content.models import ArticleTranslation
+from apps.core.forms import ConfirmForm
 from apps.core.views import form_invalid, htmx_redirect
 from apps.i18n.services import default_language, enabled_languages
 
@@ -113,18 +114,27 @@ def collection_settings(request, slug):
             "collection": collection,
             "form": form,
             "can_delete": access.is_instance_admin(request.user),
+            "delete_form": delete_form(collection),
             "nav": f"collection-{collection.pk}",
         },
     )
+
+
+def delete_form(collection, data=None) -> ConfirmForm:
+    form = ConfirmForm(data, expected=collection.slug, prefix="delete")
+    form.action = reverse("edit:collection-delete", args=[collection.slug])
+    form.fields["confirm"].label = _("Type the slug of the collection to confirm")
+    form.fields["confirm"].widget.attrs["placeholder"] = collection.slug
+    return form
 
 
 @require_POST
 @admin_required
 def collection_delete(request, slug):
     collection = get_collection(request, slug, admin=True)
-    if request.POST.get("confirm") != collection.slug:
-        messages.error(request, _("Type the slug of the collection to confirm."))
-        return redirect("edit:collection-settings", slug=collection.slug)
+    form = delete_form(collection, request.POST)
+    if not form.is_valid():
+        return form_invalid(request, form)
     collection.delete()
     messages.success(request, _("Collection deleted."))
     return htmx_redirect(request, reverse("edit:dashboard"))

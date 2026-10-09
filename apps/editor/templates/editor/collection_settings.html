@@ -14,14 +14,7 @@
           <div class="card-description">{% translate "Deletes every article, translation, revision, comment and file of the collection. This cannot be undone." %}</div>
         </div>
         <div class="card-body">
-          <form method="post" action="{% url 'edit:collection-delete' collection.slug %}" class="inline-confirm">
-            {% csrf_token %}
-            <div class="field">
-              <label class="label" for="confirm-delete">{% blocktranslate with slug=collection.slug %}Type <code>{{ slug }}</code> to confirm{% endblocktranslate %}</label>
-              <input class="input" id="confirm-delete" name="confirm" autocomplete="off" required>
-            </div>
-            <button type="submit" class="btn btn-danger">{% translate "Delete" %}</button>
-          </form>
+          {% include "core/forms/htmx_form.html" with form=delete_form %}
         </div>
       </div>
     {% endif %}

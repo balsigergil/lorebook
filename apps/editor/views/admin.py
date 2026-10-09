@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 
 from apps.access import services_accounts as accounts
 from apps.access.models import Invitation, User
+from apps.core.forms import SearchForm
 from apps.core.models import SiteSettings
 from apps.core.views import form_invalid, htmx_redirect
 from apps.i18n.models import GlossaryTerm, Language
@@ -107,7 +108,8 @@ def glossary(request):
     form = GlossaryTermForm()
     form.action = reverse("edit:glossary-create")
     form.submit_label = _("Add")
-    query = request.GET.get("q", "").strip().lower()
+    search_form = SearchForm(request.GET or None, placeholder=_("Search the glossary…"))
+    query = search_form.cleaned_data["q"].strip().lower() if search_form.is_valid() else ""
     terms = list(GlossaryTerm.objects.all())
     if query:
         terms = [
@@ -128,6 +130,7 @@ def glossary(request):
         languages=languages,
         form=form,
         query=query,
+        search_form=search_form,
     )
 
 

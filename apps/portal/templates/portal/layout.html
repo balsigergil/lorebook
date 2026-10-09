@@ -13,7 +13,7 @@
       {% block sidebar_toggle %}{% endblock %}
       <a class="reader-brand" href="{% url 'portal:home-lang' lang %}">
         <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
-        <span class="reader-brand-name">{{ site.site_name }}</span>
+        <span class="reader-brand-name">{{ site_settings.site_name }}</span>
         {% if is_internal %}<span class="tag tag-sm tag-primary">{% translate "Internal" %}</span>{% endif %}
       </a>
       {% if collections|length > 1 or current_collection %}
@@ -32,11 +32,8 @@
         </div>
       {% endif %}
     </div>
-    <form class="reader-search" method="get" action="{% url 'portal:search' lang %}" role="search">
-      <div class="input-icon">
-        <span class="input-icon-addon"><i class="fa-solid fa-magnifying-glass"></i></span>
-        <input type="search" name="q" class="input" value="{{ query|default:'' }}" placeholder="{% translate 'Search…' %}" aria-label="{% translate 'Search' %}">
-      </div>
+    <form class="reader-search search-form" method="get" action="{% url 'portal:search' lang %}" role="search">
+      {{ search_form }}
     </form>
     <div class="reader-header-right">
       {% if content_languages|length > 1 %}
@@ -84,7 +81,7 @@
 </header>
 {% block reader_body %}{% endblock %}
 <footer class="reader-footer">
-  <span>{{ site.site_name }}{% if site.tagline %} — {{ site.tagline }}{% endif %}</span>
+  <span>{{ site_settings.site_name }}{% if site_settings.tagline %} — {{ site_settings.tagline }}{% endif %}</span>
   <span class="text-light">{% translate "Powered by" %} <a href="https://github.com/balsigergil/lorebook" rel="noopener">Lorebook</a></span>
 </footer>
 {% endblock %}
