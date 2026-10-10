@@ -1,0 +1,93 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block title %}{% block page_title %}{% translate "Editor" %}{% endblock %} · {{ site_settings.site_name }}{% endblock %}
+{% block body %}
+<div class="app editor-app">
+  <aside class="sidebar" id="main-sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-top">
+        <a class="sidebar-brand editor-brand" href="{% url 'edit:dashboard' %}">
+          <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
+          <span>{{ site_settings.site_name }}</span>
+        </a>
+        <ul class="sidebar-nav">
+          <li class="sidebar-item{% if nav == 'dashboard' %} active{% endif %}">
+            <a href="{% url 'edit:dashboard' %}" class="sidebar-link"><i class="fa-solid fa-house fa-fw"></i> {% translate "Dashboard" %}</a>
+          </li>
+          <li class="sidebar-item{% if nav == 'glossary' %} active{% endif %}">
+            <a href="{% url 'edit:glossary' %}" class="sidebar-link"><i class="fa-solid fa-spell-check fa-fw"></i> {% translate "Glossary" %}</a>
+          </li>
+        </ul>
+        <h3 class="sidebar-group-title">
+          {% translate "Collections" %}
+          {% if user_is_admin %}
+            <a href="{% url 'edit:collection-create' %}" class="sidebar-group-action" title="{% translate 'New collection' %}" aria-label="{% translate 'New collection' %}"><i class="fa-solid fa-plus"></i></a>
+          {% endif %}
+        </h3>
+        <ul class="sidebar-nav">
+          {% for item in editable_collections %}
+            <li class="sidebar-item{% if collection.pk == item.pk %} active{% endif %}">
+              <a href="{% url 'edit:collection' item.slug %}" class="sidebar-link">
+                <i class="fa-solid fa-{{ item.icon|default:'book' }} fa-fw"></i>
+                <span class="truncate">{{ item.name }}</span>
+                {% if item.is_public %}<i class="fa-solid fa-globe sidebar-hint" title="{% translate 'Public' %}"></i>{% endif %}
+              </a>
+            </li>
+          {% empty %}
+            <li class="sidebar-empty">{% translate "No collection yet." %}</li>
+          {% endfor %}
+        </ul>
+        {% if user_is_admin %}
+          <h3 class="sidebar-group-title">{% translate "Administration" %}</h3>
+          <ul class="sidebar-nav">
+            <li class="sidebar-item{% if nav == 'users' %} active{% endif %}"><a href="{% url 'edit:users' %}" class="sidebar-link"><i class="fa-solid fa-user fa-fw"></i> {% translate "Users" %}</a></li>
+            <li class="sidebar-item{% if nav == 'groups' %} active{% endif %}"><a href="{% url 'edit:groups' %}" class="sidebar-link"><i class="fa-solid fa-users fa-fw"></i> {% translate "Groups" %}</a></li>
+            <li class="sidebar-item{% if nav == 'languages' %} active{% endif %}"><a href="{% url 'edit:languages' %}" class="sidebar-link"><i class="fa-solid fa-language fa-fw"></i> {% translate "Languages" %}</a></li>
+            <li class="sidebar-item{% if nav == 'settings' %} active{% endif %}"><a href="{% url 'edit:settings' %}" class="sidebar-link"><i class="fa-solid fa-gear fa-fw"></i> {% translate "Settings" %}</a></li>
+          </ul>
+        {% endif %}
+      </div>
+      <div class="sidebar-bottom">
+        <ul class="sidebar-nav">
+          <li class="sidebar-item"><a href="{{ portal_links.internal }}" class="sidebar-link"><i class="fa-solid fa-book-open-reader fa-fw"></i> {% translate "Internal portal" %}</a></li>
+          <li class="sidebar-item"><a href="{{ portal_links.public }}" class="sidebar-link"><i class="fa-solid fa-globe fa-fw"></i> {% translate "Public portal" %}</a></li>
+        </ul>
+        <div class="sidebar-user">
+          <div class="avatar avatar-sm"><span class="avatar-initials">{{ request.user.initials }}</span></div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">{{ request.user.display_name }}</div>
+            <div class="sidebar-user-email">{{ request.user.email }}</div>
+          </div>
+          <div class="dropdown" id="user-menu">
+            <button class="btn btn-icon btn-ghost btn-sm" data-menu-toggle aria-label="{% translate 'Account menu' %}">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+            <div class="menu">
+              <div class="menu-group">
+                <a class="menu-item" href="{% url 'edit:profile' %}"><i class="fa-solid fa-user fa-fw"></i> {% translate "Profile" %}</a>
+                <a class="menu-item" href="{% url 'account_change_password' %}"><i class="fa-solid fa-key fa-fw"></i> {% translate "Change password" %}</a>
+              </div>
+              <div class="menu-divider"></div>
+              <div class="menu-group">
+                <form action="{% url 'account_logout' %}" method="post">
+                  {% csrf_token %}
+                  <button class="menu-item" type="submit"><i class="fa-solid fa-right-from-bracket fa-fw"></i> {% translate "Sign out" %}</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <header class="topbar">
+    <button class="btn btn-icon btn-ghost btn-sidebar-toggle" data-sidebar="#main-sidebar" aria-label="{% translate 'Menu' %}">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-center">{% block topbar %}{% endblock %}</div>
+  </header>
+  <main class="main {% block main_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

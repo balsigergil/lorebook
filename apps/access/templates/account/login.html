@@ -1,0 +1,23 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n allauth %}
+{% block head_title %}{% translate "Sign in" %}{% endblock head_title %}
+{% block content %}
+  <h1 class="auth-title">{% translate "Sign in" %}</h1>
+  <p class="auth-subtitle">{% blocktranslate with site=site_settings.site_name %}Access the internal documentation of {{ site }}. Accounts are created by invitation.{% endblocktranslate %}</p>
+  {% if not SOCIALACCOUNT_ONLY %}
+    {% url 'account_login' as login_url %}
+    {% element form form=form method="post" action=login_url tags="entrance,login" %}
+      {% slot body %}
+        {% csrf_token %}
+        {% element fields form=form unlabeled=True %}{% endelement %}
+        {{ redirect_field }}
+      {% endslot %}
+      {% slot actions %}
+        {% element button type="submit" tags="prominent,login,primary" %}{% translate "Sign in" %}{% endelement %}
+      {% endslot %}
+    {% endelement %}
+  {% endif %}
+  {% if SOCIALACCOUNT_ENABLED %}
+    {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+  {% endif %}
+{% endblock content %}

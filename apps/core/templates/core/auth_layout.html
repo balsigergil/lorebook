@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+{% block body_class %}auth-page{% endblock %}
+{% block body %}
+  <main class="auth-shell">
+    <a class="auth-brand" href="{{ portal_links.public }}">
+      <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
+      <span>{{ site_settings.site_name }}</span>
+    </a>
+    <div class="card auth-card">
+      <div class="card-body">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+    {% block below %}{% endblock %}
+  </main>
+{% endblock %}

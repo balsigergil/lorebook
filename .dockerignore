@@ -53,7 +53,7 @@ coverage.xml
 cover/
 
 # Translations
-*.mo
+# Compiled translations (*.mo) are part of the image.
 *.pot
 
 # Django stuff:

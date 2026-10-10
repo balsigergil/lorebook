@@ -1,0 +1,58 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{{ group.name }}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'edit:groups' %}">{% translate "Groups" %}</a></li>
+        <li class="breadcrumb-item breadcrumb-separator"><i class="fas fa-angle-right"></i></li>
+        <li class="breadcrumb-item active">{{ group.name }}</li>
+      </ol></nav>
+      <h1 class="page-title">{{ group.name }}</h1>
+    </div>
+  </header>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">{% translate "Members" %}</h2></div>
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          {% for member in members %}
+            <tr>
+              <td>{{ member.display_name }} <span class="text-light">{{ member.email }}</span></td>
+              <td class="text-right">
+                <form method="post" class="inline-form">{% csrf_token %}
+                  <input type="hidden" name="action" value="remove"><input type="hidden" name="user" value="{{ member.pk }}">
+                  <button class="btn btn-ghost btn-xs" type="submit"><i class="fa-solid fa-xmark"></i> {% translate "Remove" %}</button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td class="text-light">{% translate "No member yet." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-body">{% include "core/forms/htmx_form.html" with form=member_form action_name="add" %}</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">{% translate "Roles on collections" %}</h2></div>
+    <ul class="list">
+      {% for role in roles %}
+        <li class="list-item"><a href="{% url 'edit:collection-permissions' role.collection.slug %}">{{ role.collection.name }}</a> <span class="tag tag-sm">{{ role.get_role_display }}</span></li>
+      {% empty %}
+        <li class="list-item list-empty">{% translate "This group has no role yet. Grant one from the permissions of a collection." %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">{% translate "Rename" %}</h2></div>
+    <div class="card-body">{% include "core/forms/htmx_form.html" with form=rename_form action_name="rename" %}</div>
+  </div>
+  <form method="post" class="mt-4">{% csrf_token %}
+    <input type="hidden" name="action" value="delete">
+    <button type="submit" class="btn btn-ghost btn-sm text-danger"><i class="fa-solid fa-trash"></i> {% translate "Delete this group" %}</button>
+  </form>
+</div>
+{% endblock %}

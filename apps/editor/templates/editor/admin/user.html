@@ -1,0 +1,19 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{{ managed_user.display_name }}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'edit:users' %}">{% translate "Users" %}</a></li>
+        <li class="breadcrumb-item breadcrumb-separator"><i class="fas fa-angle-right"></i></li>
+        <li class="breadcrumb-item active">{{ managed_user.display_name }}</li>
+      </ol></nav>
+      <h1 class="page-title">{{ managed_user.display_name }}</h1>
+      <p class="page-subtitle">{% blocktranslate with date=managed_user.date_joined|date:"DATE_FORMAT" %}Member since {{ date }}{% endblocktranslate %}{% if managed_user.last_login %} · {% blocktranslate with since=managed_user.last_login|timesince %}last sign-in {{ since }} ago{% endblocktranslate %}{% endif %}</p>
+    </div>
+  </header>
+  <div class="card"><div class="card-body">{% include "core/forms/htmx_form.html" %}</div></div>
+</div>
+{% endblock %}

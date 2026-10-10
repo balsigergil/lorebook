@@ -1,81 +1,70 @@
 import json
+import logging
 import re
+from functools import cache
 
 from django import template
 from django.conf import settings
+from django.contrib.staticfiles import finders
 from django.templatetags.static import static
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html, format_html_join
 
 register = template.Library()
+logger = logging.getLogger(__name__)
 
-DEV_SERVER_ROOT = "http://localhost:5173/static/lorebook"
 PROD_PREFIX = "lorebook/"
-MANIFEST_PATH = "static/lorebook/manifest.json"
+MANIFEST_NAME = "lorebook/manifest.json"
+
+
+@cache
+def load_manifest() -> dict:
+    path = finders.find(MANIFEST_NAME) or (settings.STATIC_ROOT / MANIFEST_NAME)
+    try:
+        with open(path) as fp:
+            return json.load(fp)
+    except OSError:
+        logger.warning("Vite manifest not found; run `npm run build`.")
+        return {}
 
 
 def vite_manifest(entries_names):
-    if settings.DEBUG:
-        scripts = [
-            f"{DEV_SERVER_ROOT}/@vite/client",
-        ]
+    if settings.VITE_DEV_SERVER:
+        scripts = [f"{settings.VITE_DEV_SERVER_URL}/@vite/client"]
+        scripts += [f"{settings.VITE_DEV_SERVER_URL}/{name}" for name in entries_names]
+        return scripts, []
 
-        for name in entries_names:
-            scripts.append(f"{DEV_SERVER_ROOT}/{name}")
+    manifest = load_manifest()
+    processed = set()
 
-        styles = []
+    def process(names):
+        scripts, styles = [], []
+        for name in names:
+            if name in processed or name not in manifest:
+                continue
+            processed.add(name)
+            chunk = manifest[name]
+            import_scripts, import_styles = process(chunk.get("imports", []))
+            scripts += import_scripts
+            styles += import_styles
+            if chunk.get("isEntry"):
+                scripts.append(PROD_PREFIX + chunk["file"])
+            styles += [PROD_PREFIX + css for css in chunk.get("css", [])]
         return scripts, styles
-    else:
-        with open(MANIFEST_PATH) as fp:
-            manifest = json.load(fp)
-        _processed = set()
 
-        def _process_entries(names):
-            scripts = []
-            styles = []
-
-            for name in names:
-                if name in _processed:
-                    continue
-
-                chunk = manifest[name]
-
-                import_scripts, import_styles = _process_entries(
-                    chunk.get("imports", [])
-                )
-                scripts += import_scripts
-                styles += import_styles
-
-                scripts += [PROD_PREFIX + chunk["file"]]
-                styles += [PROD_PREFIX + css for css in chunk.get("css", [])]
-
-                _processed.add(name)
-
-            return scripts, styles
-
-        return _process_entries(entries_names)
+    return process(entries_names)
 
 
-def is_absolute_url(url):
-    return re.match("^https?://", url)
-
-
-def as_link_tag(href):
-    return f'<link rel="stylesheet" href="{href}" />'
-
-
-def as_script_tag(src):
-    return f'<script type="module" src="{src}"></script>'
+def to_url(path: str) -> str:
+    return path if re.match("^https?://", path) else static(path)
 
 
 @register.simple_tag(name="vite")
 def vite_scripts_styles(*entries_names):
     scripts, styles = vite_manifest(entries_names)
-    styles = map(lambda href: href if is_absolute_url(href) else static(href), styles)
-    scripts = map(lambda src: src if is_absolute_url(src) else static(src), scripts)
-
-    result = [
-        *map(as_link_tag, styles),
-        *map(as_script_tag, scripts),
-    ]
-
-    return mark_safe("\n".join(result))  # noqa: S308
+    links = format_html_join(
+        "\n", '<link rel="stylesheet" href="{}">', ((to_url(h),) for h in styles)
+    )
+    tags = format_html_join(
+        "\n", '<script type="module" src="{}"></script>', ((to_url(s),) for s in scripts)
+    )
+    return format_html("{}\n{}", links, tags)

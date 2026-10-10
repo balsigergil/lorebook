@@ -1,0 +1,8 @@
+{% extends "core/auth_layout.html" %}
+{% load i18n %}
+{% block title %}{% translate "Join" %} · {{ site_settings.site_name }}{% endblock %}
+{% block content %}
+  <h1 class="auth-title">{% blocktranslate with site=site_settings.site_name %}Join {{ site }}{% endblocktranslate %}</h1>
+  <p class="auth-subtitle">{% blocktranslate with email=invitation.email %}Create the account of <strong>{{ email }}</strong>.{% endblocktranslate %}</p>
+  {% include "core/forms/htmx_form.html" %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% load i18n core_tags %}
+<header class="page-header">
+  <div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'edit:dashboard' %}">{% translate "Collections" %}</a></li>
+        <li class="breadcrumb-item breadcrumb-separator"><i class="fas fa-angle-right"></i></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ collection.name }}</li>
+      </ol>
+    </nav>
+    <h1 class="page-title"><i class="fa-solid fa-{{ collection.icon|default:'book' }} page-title-icon"></i> {{ collection.name }}
+      {% if collection.is_public %}<span class="tag tag-sm tag-success"><i class="fa-solid fa-globe"></i> {% translate "Public" %}</span>{% else %}<span class="tag tag-sm"><i class="fa-solid fa-lock"></i> {% translate "Internal" %}</span>{% endif %}
+    </h1>
+  </div>
+  <div class="page-actions">
+    <a class="btn btn-ghost" href="{% portal_url 'internal' 'portal:collection' language|default:default_content_language collection.slug %}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> {% translate "View" %}</a>
+    {% if can_admin %}
+      <a class="btn btn-ghost{% if tab == 'permissions' %} active{% endif %}" href="{% url 'edit:collection-permissions' collection.slug %}"><i class="fa-solid fa-user-shield"></i> {% translate "Permissions" %}</a>
+      <a class="btn btn-ghost{% if tab == 'settings' %} active{% endif %}" href="{% url 'edit:collection-settings' collection.slug %}"><i class="fa-solid fa-sliders"></i> {% translate "Settings" %}</a>
+    {% endif %}
+    {% block actions %}{% endblock %}
+  </div>
+</header>

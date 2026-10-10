@@ -1,0 +1,87 @@
+{% extends "core/base.html" %}
+{% load i18n portal_tags core_tags %}
+{% block html_lang %}{{ lang }}{% endblock %}
+{% block body_class %}reader{% if is_internal %} reader-internal{% endif %}{% endblock %}
+{% block meta %}
+  {% if is_internal %}<meta name="robots" content="noindex">{% endif %}
+  {% for language in content_languages %}<link rel="alternate" hreflang="{{ language.code }}" href="{% switch_language language.code %}">{% endfor %}
+{% endblock %}
+{% block body %}
+<header class="reader-header">
+  <div class="reader-header-inner">
+    <div class="reader-header-left">
+      {% block sidebar_toggle %}{% endblock %}
+      <a class="reader-brand" href="{% url 'portal:home-lang' lang %}">
+        <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
+        <span class="reader-brand-name">{{ site_settings.site_name }}</span>
+        {% if is_internal %}<span class="tag tag-sm tag-primary">{% translate "Internal" %}</span>{% endif %}
+      </a>
+      {% if collections|length > 1 or current_collection %}
+        <div class="dropdown collection-switcher">
+          <button class="btn btn-ghost btn-sm" data-menu-toggle>
+            {% if current_collection %}<i class="fa-solid fa-{{ current_collection.icon|default:'book' }}"></i> {{ current_collection.name }}{% else %}{% translate "Collections" %}{% endif %}
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="menu">
+            <div class="menu-group">
+              {% for item in collections %}
+                <a class="menu-item" href="{% url 'portal:collection' lang item.slug %}"><i class="fa-solid fa-{{ item.icon|default:'book' }} fa-fw"></i> {{ item.name }}{% if is_internal and item.is_public %} <i class="fa-solid fa-globe text-light" title="{% translate 'Public' %}"></i>{% endif %}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    <form class="reader-search search-form" method="get" action="{% url 'portal:search' lang %}" role="search">
+      {{ search_form }}
+    </form>
+    <div class="reader-header-right">
+      {% if content_languages|length > 1 %}
+        <div class="dropdown">
+          <button class="btn btn-ghost btn-sm" data-menu-toggle aria-label="{% translate 'Language' %}"><i class="fa-solid fa-globe"></i> {{ lang|upper }}</button>
+          <div class="menu">
+            <div class="menu-group">
+              {% for language in content_languages %}
+                <a class="menu-item{% if language.code == lang %} active{% endif %}" href="{% switch_language language.code %}" hreflang="{{ language.code }}" lang="{{ language.code }}">
+                  {{ language.name }}
+                  {% if available_languages and language.code not in available_languages %}<span class="menu-shortcut">{% translate "not translated" %}</span>{% endif %}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <div class="dropdown">
+          <button class="btn btn-ghost btn-sm" data-menu-toggle aria-label="{% translate 'Account menu' %}"><span class="avatar avatar-xs"><span class="avatar-initials">{{ user.initials }}</span></span></button>
+          <div class="menu">
+            <div class="menu-group">
+              <div class="menu-label">{{ user.display_name }}</div>
+              {% if is_internal %}
+                <a class="menu-item" href="{{ portal_links.public }}"><i class="fa-solid fa-globe fa-fw"></i> {% translate "Public portal" %}</a>
+              {% else %}
+                <a class="menu-item" href="{{ portal_links.internal }}"><i class="fa-solid fa-book-open-reader fa-fw"></i> {% translate "Internal portal" %}</a>
+              {% endif %}
+              {% if user_can_edit %}<a class="menu-item" href="{{ portal_links.edit }}"><i class="fa-solid fa-pen-to-square fa-fw"></i> {% translate "Editor" %}</a>{% endif %}
+              <a class="menu-item" href="{% url 'account_change_password' %}"><i class="fa-solid fa-key fa-fw"></i> {% translate "Change password" %}</a>
+            </div>
+            <div class="menu-divider"></div>
+            <div class="menu-group">
+              <form action="{% url 'account_logout' %}" method="post">{% csrf_token %}
+                <button class="menu-item" type="submit"><i class="fa-solid fa-right-from-bracket fa-fw"></i> {% translate "Sign out" %}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <a class="btn btn-outline btn-sm" href="{% url 'account_login' %}?next={{ portal_links.internal|urlencode }}">{% translate "Sign in" %}</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+{% block reader_body %}{% endblock %}
+<footer class="reader-footer">
+  <span>{{ site_settings.site_name }}{% if site_settings.tagline %} — {{ site_settings.tagline }}{% endif %}</span>
+  <span class="text-light">{% translate "Powered by" %} <a href="https://github.com/balsigergil/lorebook" rel="noopener">Lorebook</a></span>
+</footer>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "portal/_with_sidebar.html" %}
+{% load i18n core_tags %}
+{% block title %}{{ current_collection.name }} · {{ site_settings.site_name }}{% endblock %}
+{% block meta %}{{ block.super }}<meta name="description" content="{{ current_collection.description|truncatechars:160 }}">{% endblock %}
+{% block content %}
+<div class="article-container">
+  <header class="article-header">
+    <h1 class="article-title"><i class="fa-solid fa-{{ current_collection.icon|default:'book' }} text-primary"></i> {{ current_collection.name }}</h1>
+    {% if current_collection.description %}<p class="article-lead">{{ current_collection.description }}</p>{% endif %}
+    {% if can_edit %}<a class="btn btn-outline btn-sm" href="{% portal_url 'edit' 'edit:collection' current_collection.slug %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a>{% endif %}
+  </header>
+  <div class="overview-grid">
+    {% for item in roots %}
+      <a class="card overview-card" href="{% url 'portal:article' lang current_collection.slug item.node.article.slug %}">
+        <div class="card-body">
+          <h2 class="overview-title">{{ item.node.title }} <i class="fa-solid fa-arrow-right"></i></h2>
+          {% if item.excerpt %}<p class="overview-text">{{ item.excerpt }}</p>{% endif %}
+          {% if item.node.children %}<p class="overview-meta">{% blocktranslate count counter=item.node.children|length %}{{ counter }} page{% plural %}{{ counter }} pages{% endblocktranslate %}</p>{% endif %}
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-state"><i class="fa-regular fa-file-lines"></i><p>{% translate "No article is published in this collection yet." %}</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

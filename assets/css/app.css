@@ -5,6 +5,7 @@
 @import "@fortawesome/fontawesome-free/css/regular.css";
 @import "@fortawesome/fontawesome-free/css/brands.css";
 @import "theme.css";
+@import "prose.css";
 
 :root {
   --bl-fw-bold: 600;

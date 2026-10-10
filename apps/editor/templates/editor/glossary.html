@@ -1,0 +1,44 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Glossary" %}{% endblock %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Glossary" %}</h1>
+      <p class="page-subtitle">{% translate "The reference terms of the instance, one column per language, for consistent translations." %}</p>
+    </div>
+    <button class="btn btn-primary" data-modal="#modal-term"><i class="fa-solid fa-plus"></i> {% translate "Add a term" %}</button>
+  </header>
+  <form method="get" class="search-form search-input" role="search">
+    {{ search_form }}
+  </form>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table">
+        <thead><tr>{% for language in languages %}<th>{{ language.name }}</th>{% endfor %}<th>{% translate "Note" %}</th><th></th></tr></thead>
+        <tbody>
+          {% for term, values in rows %}
+            <tr>
+              {% for value in values %}<td>{% if value %}{{ value }}{% else %}<span class="text-light">—</span>{% endif %}</td>{% endfor %}
+              <td class="text-light">{{ term.note|truncatechars:80 }}</td>
+              <td class="text-right"><a class="btn btn-ghost btn-xs" href="{% url 'edit:glossary-edit' term.pk %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="{{ languages|length|add:2 }}" class="text-light">{% if query %}{% translate "No term matches." %}{% else %}{% translate "The glossary is empty." %}{% endif %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal" id="modal-term" aria-labelledby="modal-term-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-term-title">{% translate "Add a term" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">{% include "core/forms/htmx_form.html" with in_modal=True %}</div>
+  </div>
+</div>
+{% endblock %}

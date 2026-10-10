@@ -1,0 +1,29 @@
+{% load i18n %}
+{% comment %}
+  A LoreForm wrapped in a <form> that posts with htmx. On a validation error
+  the view answers with this fragment only (apps.core.views.form_invalid),
+  which replaces the form in place.
+{% endcomment %}
+<form id="{{ form.form_id }}"
+      class="lore-form"
+      method="post"
+      action="{{ form.action|default:request.get_full_path }}"
+      hx-post="{{ form.action|default:request.get_full_path }}"
+      hx-target="this"
+      hx-swap="outerHTML"
+      {% if form.is_multipart %}enctype="multipart/form-data" hx-encoding="multipart/form-data"{% endif %}>
+  {% csrf_token %}
+  {% if action_name %}<input type="hidden" name="action" value="{{ action_name }}">{% endif %}
+  {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+  {{ form }}
+  <div class="form-actions">
+    {% if form.cancel_url %}
+      <a href="{{ form.cancel_url }}" class="btn btn-ghost">{% translate "Cancel" %}</a>
+    {% elif in_modal %}
+      <button type="button" class="btn btn-ghost" data-modal-close>{% translate "Cancel" %}</button>
+    {% endif %}
+    <button type="submit" class="btn {% if form.danger %}btn-danger{% else %}btn-primary{% endif %}">
+      {{ form.submit_label }}
+    </button>
+  </div>
+</form>

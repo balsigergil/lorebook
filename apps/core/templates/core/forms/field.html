@@ -1,0 +1,47 @@
+{% load core_tags %}
+{% with input_type=field.field.widget.input_type %}
+<div class="field{% if field.errors %} field-danger{% endif %}" data-field="{{ field.html_name }}">
+  {% if input_type == "checkbox" and not field.field.widget.allow_multiple_selected %}
+    <div class="field-switch">
+      {% lore_widget field %}
+      <label for="{{ field.id_for_label }}" class="input-check-label">
+        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+      </label>
+    </div>
+  {% elif input_type == "radio" or field.field.widget.allow_multiple_selected and input_type == "checkbox" %}
+    <p class="label">
+      {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+    </p>
+    <div class="field-choices">
+      {% for choice in field %}
+        <div class="field-check">
+          {{ choice.tag }}
+          <label for="{{ choice.id_for_label }}" class="input-check-label">{{ choice.choice_label }}</label>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    {% if field.label %}
+      <label for="{{ field.id_for_label }}" class="label">
+        {{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}
+      </label>
+    {% endif %}
+    {% with icon=field.field.widget.attrs|get_item:"data-icon" %}
+      {% if icon %}
+        <div class="input-icon">
+          <span class="input-icon-addon"><i class="fa-solid fa-{{ icon }}"></i></span>
+          {% lore_widget field %}
+        </div>
+      {% else %}
+        {% lore_widget field %}
+      {% endif %}
+    {% endwith %}
+  {% endif %}
+  {% if field.help_text %}
+    <p class="field-text-help">{{ field.help_text|safe }}</p>
+  {% endif %}
+  {% for error in field.errors %}
+    <p class="field-text-danger">{{ error }}</p>
+  {% endfor %}
+</div>
+{% endwith %}

@@ -1,0 +1,23 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Settings" %} · {{ collection.name }}{% endblock %}
+{% block content %}
+<div class="page">
+  {% include "editor/_collection_header.html" with can_admin=True tab="settings" %}
+  <div class="page-narrow">
+    <div class="card"><div class="card-header"><h2 class="card-title">{% translate "Settings" %}</h2></div>
+      <div class="card-body">{% include "core/forms/htmx_form.html" %}</div>
+    </div>
+    {% if can_delete %}
+      <div class="card danger-zone">
+        <div class="card-header"><h2 class="card-title">{% translate "Delete the collection" %}</h2>
+          <div class="card-description">{% translate "Deletes every article, translation, revision, comment and file of the collection. This cannot be undone." %}</div>
+        </div>
+        <div class="card-body">
+          {% include "core/forms/htmx_form.html" with form=delete_form %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

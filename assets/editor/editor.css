@@ -1,0 +1,148 @@
+/* The React editing island. */
+
+.document-editor {
+  max-width: calc(var(--lb-content-width) + 4rem);
+  margin: 0 auto;
+}
+
+.editor-toolbar {
+  position: sticky;
+  top: 7.4rem;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.35rem;
+  margin: 0 0 1.5rem;
+  background: var(--lb-surface);
+  border: 1px solid var(--lb-border);
+  border-radius: var(--lb-radius);
+  box-shadow: var(--bl-shadow-sm);
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  padding-right: 0.3rem;
+  margin-right: 0.1rem;
+  border-right: 1px solid var(--lb-border);
+}
+
+.toolbar-section:last-child {
+  border-right: 0;
+}
+
+.toolbar-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.4rem;
+  border: 0;
+  background: transparent;
+  color: var(--lb-text-muted);
+  cursor: pointer;
+}
+
+.toolbar-button:hover:not(:disabled) {
+  background: var(--lb-surface-hover);
+  color: var(--lb-text);
+}
+
+.toolbar-button.is-active {
+  background: var(--lb-accent-soft);
+  color: var(--lb-accent-text);
+}
+
+.toolbar-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.toolbar-select {
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--lb-text);
+  padding: 0 0.4rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.toolbar-select:hover {
+  background: var(--lb-surface-hover);
+}
+
+.document-page {
+  padding: 0 2rem;
+}
+
+.document-title {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  font: inherit;
+  font-size: 2.4rem;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--lb-text);
+  margin-bottom: 1.25rem;
+}
+
+.document-title::placeholder {
+  color: var(--lb-border-strong);
+}
+
+.prose-editor {
+  outline: none;
+  min-height: 50vh;
+}
+
+.prose-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--lb-text-subtle);
+  pointer-events: none;
+}
+
+.prose-editor .ProseMirror-selectednode {
+  outline: 2px solid var(--lb-accent);
+  outline-offset: 2px;
+}
+
+.prose-editor img.ProseMirror-selectednode {
+  border-radius: var(--lb-radius);
+}
+
+.prose-editor .selectedCell {
+  background: var(--lb-accent-soft);
+}
+
+.prose-editor .callout-icon {
+  user-select: none;
+}
+
+.prose-editor ul[data-type="taskList"] li > label input {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 640px) {
+  .document-page {
+    padding: 0;
+  }
+
+  .editor-toolbar {
+    top: 9rem;
+  }
+
+  .document-title {
+    font-size: 1.8rem;
+  }
+}

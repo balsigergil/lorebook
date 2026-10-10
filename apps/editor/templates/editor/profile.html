@@ -1,0 +1,12 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Profile" %}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div><h1 class="page-title">{% translate "Profile" %}</h1><p class="page-subtitle">{{ request.user.email }}</p></div>
+    <a class="btn btn-ghost" href="{% url 'account_change_password' %}"><i class="fa-solid fa-key"></i> {% translate "Change password" %}</a>
+  </header>
+  <div class="card"><div class="card-body">{% include "core/forms/htmx_form.html" %}</div></div>
+</div>
+{% endblock %}

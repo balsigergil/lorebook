@@ -1,0 +1,8 @@
+{% load i18n %}{% translate "Hello," %}
+
+{% if invitation.invited_by %}{% blocktranslate with name=invitation.invited_by.display_name site=site_settings.site_name %}{{ name }} invited you to join {{ site }}.{% endblocktranslate %}{% else %}{% blocktranslate with site=site_settings.site_name %}You are invited to join {{ site }}.{% endblocktranslate %}{% endif %}
+
+{% translate "Create your account by following this link:" %}
+{{ accept_url }}
+
+{% blocktranslate with days=invitation.VALIDITY_DAYS %}This invitation is valid for {{ days }} days.{% endblocktranslate %}

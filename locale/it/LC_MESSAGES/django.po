@@ -1,0 +1,1267 @@
+# Italian translation of Lorebook.
+# This file is distributed under the same license as Lorebook (AGPL-3.0).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Lorebook\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-10 00:26+0200\n"
+"PO-Revision-Date: 2026-10-10 00:00+0200\n"
+"Last-Translator: Lorebook\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Create my account"
+msgstr "Crea il mio account"
+
+msgid "First name"
+msgstr "Nome"
+
+msgid "Last name"
+msgstr "Cognome"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Confirm password"
+msgstr "Conferma la password"
+
+msgid "The two passwords do not match."
+msgstr "Le due password non coincidono."
+
+msgid "email address"
+msgstr "indirizzo e-mail"
+
+msgid "first name"
+msgstr "nome"
+
+msgid "last name"
+msgstr "cognome"
+
+msgid "staff status"
+msgstr "stato staff"
+
+msgid "active"
+msgstr "attivo"
+
+msgid "date joined"
+msgstr "data di iscrizione"
+
+msgid "user"
+msgstr "utente"
+
+msgid "users"
+msgstr "utenti"
+
+msgid "Reader"
+msgstr "Lettore"
+
+msgid "Editor"
+msgstr "Redattore"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "role"
+msgstr "ruolo"
+
+msgid "collection role"
+msgstr "ruolo in una raccolta"
+
+msgid "collection roles"
+msgstr "ruoli nelle raccolte"
+
+msgid "groups"
+msgstr "gruppi"
+
+msgid "instance administrator"
+msgstr "amministratore dell'istanza"
+
+msgid "invitation"
+msgstr "invito"
+
+msgid "invitations"
+msgstr "inviti"
+
+msgid "Join"
+msgstr "Unisciti"
+
+#, python-format
+msgid "Join %(site)s"
+msgstr "Unisciti a %(site)s"
+
+#, python-format
+msgid "Create the account of <strong>%(email)s</strong>."
+msgstr "Crea l'account di <strong>%(email)s</strong>."
+
+msgid "Hello,"
+msgstr "Buongiorno,"
+
+#, python-format
+msgid "%(name)s invited you to join %(site)s."
+msgstr "%(name)s ti invita a unirti a %(site)s."
+
+#, python-format
+msgid "You are invited to join %(site)s."
+msgstr "Sei invitato a unirti a %(site)s."
+
+msgid "Create your account by following this link:"
+msgstr "Crea il tuo account seguendo questo link:"
+
+#, python-format
+msgid "This invitation is valid for %(days)s days."
+msgstr "Questo invito è valido %(days)s giorni."
+
+#, python-format
+msgid "You are invited to %(site)s"
+msgstr "Invito a %(site)s"
+
+msgid "Sign in"
+msgstr "Accedi"
+
+#, python-format
+msgid ""
+"Access the internal documentation of %(site)s. Accounts are created by "
+"invitation."
+msgstr ""
+"Accedi alla documentazione interna di %(site)s. Gli account vengono creati "
+"su invito."
+
+msgid "This invitation is no longer valid."
+msgstr "Questo invito non è più valido."
+
+msgid "daily views"
+msgstr "letture giornaliere"
+
+msgid "Comment"
+msgstr "Commenta"
+
+msgid "Write a comment…"
+msgstr "Scrivi un commento…"
+
+msgid "Reply"
+msgstr "Rispondi"
+
+msgid "thread"
+msgstr "discussione"
+
+msgid "threads"
+msgstr "discussioni"
+
+msgid "comment"
+msgstr "commento"
+
+msgid "comments"
+msgstr "commenti"
+
+msgid "Comments"
+msgstr "Commenti"
+
+msgid "Only visible to signed-in users. Never shown on the public portal."
+msgstr "Visibili solo agli utenti connessi. Mai mostrati sul portale pubblico."
+
+msgid "Deleted user"
+msgstr "Utente eliminato"
+
+#, python-format
+msgid "%(since)s ago"
+msgstr "%(since)s fa"
+
+#, python-format
+msgid "Resolved by %(name)s"
+msgstr "Risolto da %(name)s"
+
+msgid "Reopen"
+msgstr "Riapri"
+
+msgid "Resolve"
+msgstr "Risolvi"
+
+msgid "No comments yet."
+msgstr "Ancora nessun commento."
+
+msgid "name"
+msgstr "nome"
+
+msgid "slug"
+msgstr "identificativo URL"
+
+msgid "description"
+msgstr "descrizione"
+
+msgid "icon"
+msgstr "icona"
+
+msgid "Font Awesome icon name, e.g. book, rocket, gear."
+msgstr "Nome di un'icona Font Awesome, ad es. book, rocket, gear."
+
+msgid "public"
+msgstr "pubblica"
+
+msgid "Public collections are readable by anyone on the public portal."
+msgstr "Le raccolte pubbliche sono leggibili da tutti sul portale pubblico."
+
+msgid "position"
+msgstr "posizione"
+
+msgid "collection"
+msgstr "raccolta"
+
+msgid "collections"
+msgstr "raccolte"
+
+msgid "parent"
+msgstr "padre"
+
+msgid "restrict reading to"
+msgstr "limita la lettura a"
+
+msgid ""
+"Leave empty to let every reader of the collection read this article. Child "
+"articles inherit the restriction."
+msgstr ""
+"Lascia vuoto per permettere a tutti i lettori della raccolta di leggere "
+"questo articolo. I sotto-articoli ereditano la restrizione."
+
+msgid "article"
+msgstr "articolo"
+
+msgid "articles"
+msgstr "articoli"
+
+msgid "language"
+msgstr "lingua"
+
+msgid "title"
+msgstr "titolo"
+
+msgid "outdated"
+msgstr "obsoleta"
+
+msgid "article translation"
+msgstr "versione linguistica"
+
+msgid "article translations"
+msgstr "versioni linguistiche"
+
+msgid "Content update"
+msgstr "Aggiornamento del contenuto"
+
+msgid "Minor change"
+msgstr "Modifica minore"
+
+msgid "Translation synchronised"
+msgstr "Traduzione sincronizzata"
+
+msgid "note"
+msgstr "nota"
+
+msgid "revision"
+msgstr "revisione"
+
+msgid "revisions"
+msgstr "revisioni"
+
+msgid "Save"
+msgstr "Salva"
+
+msgid "Search…"
+msgstr "Cerca…"
+
+msgid "Search"
+msgstr "Cerca"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Confirmation"
+msgstr "Conferma"
+
+msgid "The value does not match."
+msgstr "Il valore non corrisponde."
+
+msgid "site name"
+msgstr "nome del sito"
+
+msgid "tagline"
+msgstr "slogan"
+
+msgid "main domain"
+msgstr "dominio principale"
+
+msgid ""
+"Domain serving the interfaces that have no dedicated domain, e.g. lorebook."
+"example.com."
+msgstr ""
+"Dominio che serve le interfacce senza dominio dedicato, ad es. lorebook."
+"esempio.ch."
+
+msgid "public portal domain"
+msgstr "dominio del portale pubblico"
+
+msgid "e.g. docs.example.com. Leave empty to serve the public portal at /."
+msgstr ""
+"ad es. docs.esempio.ch. Lascia vuoto per servire il portale pubblico su /."
+
+msgid "internal portal domain"
+msgstr "dominio del portale interno"
+
+msgid ""
+"e.g. kb.example.com. Leave empty to serve the internal portal at /internal."
+msgstr ""
+"ad es. kb.esempio.ch. Lascia vuoto per servire il portale interno su /"
+"internal."
+
+msgid "editing interface domain"
+msgstr "dominio dell'interfaccia di redazione"
+
+msgid "e.g. edit.example.com. Leave empty to serve the editor at /edit."
+msgstr "ad es. edit.esempio.ch. Lascia vuoto per servire l'editor su /edit."
+
+msgid "site settings"
+msgstr "impostazioni del sito"
+
+msgid "Access denied"
+msgstr "Accesso negato"
+
+msgid ""
+"You do not have the rights needed for this page. Ask an administrator if you "
+"think you should."
+msgstr ""
+"Non hai i permessi necessari per questa pagina. Rivolgiti a un "
+"amministratore se pensi di doverli avere."
+
+msgid "Back to the documentation"
+msgstr "Torna alla documentazione"
+
+msgid "Page not found"
+msgstr "Pagina non trovata"
+
+msgid "This page does not exist, or you are not allowed to read it."
+msgstr "Questa pagina non esiste, oppure non sei autorizzato a leggerla."
+
+msgid "Select…"
+msgstr "Seleziona…"
+
+msgid "No results"
+msgstr "Nessun risultato"
+
+msgid "Copy"
+msgstr "Copia"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Used in URLs. Generated from the name when empty."
+msgstr "Usato negli URL. Generato dal nome se vuoto."
+
+msgid "This slug is reserved."
+msgstr "Questo identificativo è riservato."
+
+msgid "Another collection already uses this slug."
+msgstr "Un'altra raccolta usa già questo identificativo."
+
+msgid "Grant"
+msgstr "Assegna"
+
+msgid "Group"
+msgstr "Gruppo"
+
+msgid "Role"
+msgstr "Ruolo"
+
+msgid "Create"
+msgstr "Crea"
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Parent article"
+msgstr "Articolo padre"
+
+msgid "— At the root of the collection —"
+msgstr "— Alla radice della raccolta —"
+
+msgid "Another article of this collection uses this slug."
+msgstr "Un altro articolo di questa raccolta usa questo identificativo."
+
+msgid "Publish"
+msgstr "Pubblica"
+
+msgid "Kind of change"
+msgstr "Tipo di modifica"
+
+msgid "Content update — the other languages become outdated"
+msgstr "Aggiornamento del contenuto — le altre lingue diventano obsolete"
+
+msgid "Minor change (typo, formatting) — nothing becomes outdated"
+msgstr "Modifica minore (refuso, formattazione) — nulla diventa obsoleto"
+
+msgid "Note"
+msgstr "Nota"
+
+msgid "Optional, shown in the history."
+msgstr "Facoltativa, mostrata nella cronologia."
+
+msgid "Translation brought up to date — mark this version as synchronised"
+msgstr "Traduzione aggiornata — segna questa versione come sincronizzata"
+
+msgid "Create this translation"
+msgstr "Crea questa traduzione"
+
+msgid "Start from"
+msgstr "Parti da"
+
+msgid "An empty page"
+msgstr "Una pagina vuota"
+
+#, python-format
+msgid "A copy of the %(language)s version"
+msgstr "Una copia della versione «%(language)s»"
+
+msgid "Import"
+msgstr "Importa"
+
+msgid "Markdown file"
+msgstr "File Markdown"
+
+msgid "Publish right away"
+msgstr "Pubblica subito"
+
+msgid "The file is too large (2 MB max)."
+msgstr "Il file è troppo grande (max 2 MB)."
+
+msgid "The file must be UTF-8 text."
+msgstr "Il file deve essere testo UTF-8."
+
+msgid "Enter the term in at least one language."
+msgstr "Inserisci il termine in almeno una lingua."
+
+msgid "Each interface needs a different domain."
+msgstr "Ogni interfaccia richiede un dominio diverso."
+
+msgid "The main domain cannot be one of the interface domains."
+msgstr "Il dominio principale non può essere quello di un'interfaccia."
+
+msgid ""
+"Set the main domain, which serves the interfaces without their own domain."
+msgstr ""
+"Imposta il dominio principale, che serve le interfacce senza dominio proprio."
+
+msgid "Enter a domain name only, e.g. docs.example.com."
+msgstr "Inserisci solo un nome di dominio, ad es. docs.esempio.ch."
+
+msgid "Add"
+msgstr "Aggiungi"
+
+msgid "User"
+msgstr "Utente"
+
+msgid "Send the invitation"
+msgstr "Invia l'invito"
+
+msgid "This person already has an account."
+msgstr "Questa persona ha già un account."
+
+msgid "Instance administrator"
+msgstr "Amministratore dell'istanza"
+
+msgid "Manages languages, groups, users and settings, and edits everything."
+msgstr ""
+"Gestisce lingue, gruppi, utenti e impostazioni, e può modificare tutto."
+
+msgid "Languages"
+msgstr "Lingue"
+
+msgid "Collections"
+msgstr "Raccolte"
+
+msgid "Public"
+msgstr "Pubblica"
+
+msgid "Internal"
+msgstr "Interna"
+
+msgid "View"
+msgstr "Visualizza"
+
+msgid "Permissions"
+msgstr "Permessi"
+
+msgid "Settings"
+msgstr "Impostazioni"
+
+msgid "Not written yet"
+msgstr "Non ancora scritta"
+
+msgid "Outdated"
+msgstr "Obsoleta"
+
+msgid "Draft, never published"
+msgstr "Bozza, mai pubblicata"
+
+msgid "Published, with unpublished changes"
+msgstr "Pubblicata, con modifiche non pubblicate"
+
+msgid "Published and up to date"
+msgstr "Pubblicata e aggiornata"
+
+msgid "Groups"
+msgstr "Gruppi"
+
+msgid "Members"
+msgstr "Membri"
+
+msgid "Remove"
+msgstr "Rimuovi"
+
+msgid "No member yet."
+msgstr "Ancora nessun membro."
+
+msgid "Roles on collections"
+msgstr "Ruoli nelle raccolte"
+
+msgid ""
+"This group has no role yet. Grant one from the permissions of a collection."
+msgstr ""
+"Questo gruppo non ha ancora un ruolo. Assegnane uno dai permessi di una "
+"raccolta."
+
+msgid "Rename"
+msgstr "Rinomina"
+
+msgid "Delete this group"
+msgstr "Elimina questo gruppo"
+
+msgid ""
+"Groups receive a role on collections and can be allowed to read restricted "
+"articles."
+msgstr ""
+"I gruppi ricevono un ruolo nelle raccolte e possono essere autorizzati a "
+"leggere articoli riservati."
+
+msgid "No group yet."
+msgstr "Ancora nessun gruppo."
+
+msgid "New group"
+msgstr "Nuovo gruppo"
+
+msgid ""
+"Enabled languages apply to every collection. The first one is the default "
+"language of the portals."
+msgstr ""
+"Le lingue attivate valgono per tutte le raccolte. La prima è la lingua "
+"predefinita dei portali."
+
+msgid "Code"
+msgstr "Codice"
+
+msgid "Status"
+msgstr "Stato"
+
+msgid "Actions"
+msgstr "Azioni"
+
+msgid "Default"
+msgstr "Predefinita"
+
+msgid "Enabled"
+msgstr "Attivata"
+
+msgid "Disabled"
+msgstr "Disattivata"
+
+msgid "Move up"
+msgstr "Sposta su"
+
+msgid "Move down"
+msgstr "Sposta giù"
+
+msgid "Disable"
+msgstr "Disattiva"
+
+msgid "Enable"
+msgstr "Attiva"
+
+msgid "Add a language"
+msgstr "Aggiungi una lingua"
+
+msgid ""
+"By default the public portal is served at /, the internal portal at /"
+"internal and the editor at /edit. Give an interface its own domain to serve "
+"it at the root of that domain."
+msgstr ""
+"Per impostazione predefinita il portale pubblico è servito su /, il portale "
+"interno su /internal e l'editor su /edit. Assegna un dominio a "
+"un'interfaccia per servirla alla radice di quel dominio."
+
+msgid "Users"
+msgstr "Utenti"
+
+#, python-format
+msgid "Member since %(date)s"
+msgstr "Membro dal %(date)s"
+
+#, python-format
+msgid "last sign-in %(since)s ago"
+msgstr "ultimo accesso %(since)s fa"
+
+msgid ""
+"Local accounts are created by invitation. People signing in with SSO need an "
+"invitation too, unless open sign-up is enabled for SSO."
+msgstr ""
+"Gli account locali vengono creati su invito. Anche l'accesso tramite SSO "
+"richiede un invito, a meno che la registrazione libera sia attivata per "
+"l'SSO."
+
+msgid "Invite"
+msgstr "Invita"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Deactivated"
+msgstr "Disattivato"
+
+msgid "Administrator"
+msgstr "Amministratore"
+
+msgid "Active"
+msgstr "Attivo"
+
+msgid "Edit"
+msgstr "Modifica"
+
+msgid "Pending invitations"
+msgstr "Inviti in sospeso"
+
+msgid "Expired"
+msgstr "Scaduto"
+
+#, python-format
+msgid "by %(name)s, %(since)s ago"
+msgstr "da %(name)s, %(since)s fa"
+
+msgid "Resend"
+msgstr "Invia di nuovo"
+
+msgid "Invite someone"
+msgstr "Invita qualcuno"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "New article"
+msgstr "Nuovo articolo"
+
+msgid "Import Markdown"
+msgstr "Importa Markdown"
+
+msgid "Published"
+msgstr "Pubblicata"
+
+msgid "Unpublished changes"
+msgstr "Modifiche non pubblicate"
+
+msgid "Draft"
+msgstr "Bozza"
+
+msgid "Missing"
+msgstr "Mancante"
+
+msgid "Article"
+msgstr "Articolo"
+
+msgid "Order"
+msgstr "Ordine"
+
+msgid "Reading restricted to some groups"
+msgstr "Lettura limitata ad alcuni gruppi"
+
+msgid "This collection has no article yet."
+msgstr "Questa raccolta non ha ancora articoli."
+
+msgid "Write the first article"
+msgstr "Scrivi il primo articolo"
+
+msgid ""
+"A leading # heading or a title in the front matter becomes the title of the "
+"article. GitHub alerts (> [!NOTE]) become callouts."
+msgstr ""
+"Un titolo # iniziale o un titolo nel front matter diventa il titolo "
+"dell'articolo. Gli avvisi GitHub (> [!NOTE]) diventano riquadri."
+
+msgid ""
+"Readers read the collection on the internal portal and comment. Editors also "
+"write, publish, translate and restore revisions. Admins also manage "
+"permissions and visibility."
+msgstr ""
+"I lettori leggono la raccolta sul portale interno e commentano. I redattori "
+"possono anche scrivere, pubblicare, tradurre e ripristinare revisioni. Gli "
+"admin gestiscono inoltre permessi e visibilità."
+
+msgid "This collection is public: anyone can read it on the public portal."
+msgstr ""
+"Questa raccolta è pubblica: chiunque può leggerla sul portale pubblico."
+
+msgid "Groups with access"
+msgstr "Gruppi con accesso"
+
+msgid "Only instance administrators can access this collection."
+msgstr ""
+"Solo gli amministratori dell'istanza possono accedere a questa raccolta."
+
+msgid "Grant a role"
+msgstr "Assegna un ruolo"
+
+msgid "Granting a role to a group that already has one replaces it."
+msgstr "Assegnare un ruolo a un gruppo che ne ha già uno lo sostituisce."
+
+msgid "Delete the collection"
+msgstr "Elimina la raccolta"
+
+msgid ""
+"Deletes every article, translation, revision, comment and file of the "
+"collection. This cannot be undone."
+msgstr ""
+"Elimina tutti gli articoli, le traduzioni, le revisioni, i commenti e i file "
+"della raccolta. L'operazione è irreversibile."
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#, python-format
+msgid "Hello %(name)s"
+msgstr "Ciao %(name)s"
+
+msgid "Write, translate and publish your documentation."
+msgstr "Scrivi, traduci e pubblica la tua documentazione."
+
+msgid "New collection"
+msgstr "Nuova raccolta"
+
+#, python-format
+msgid "%(counter)s article"
+msgid_plural "%(counter)s articles"
+msgstr[0] "%(counter)s articolo"
+msgstr[1] "%(counter)s articoli"
+
+msgid "No collection yet."
+msgstr "Ancora nessuna raccolta."
+
+msgid "Everything is published."
+msgstr "Tutto è pubblicato."
+
+msgid "Outdated translations"
+msgstr "Traduzioni obsolete"
+
+msgid "All translations are up to date."
+msgstr "Tutte le traduzioni sono aggiornate."
+
+msgid "Most read (30 days)"
+msgstr "I più letti (30 giorni)"
+
+#, python-format
+msgid "%(counter)s read"
+msgid_plural "%(counter)s reads"
+msgstr[0] "%(counter)s lettura"
+msgstr[1] "%(counter)s letture"
+
+msgid "No reads yet."
+msgstr "Ancora nessuna lettura."
+
+msgid "Draft — never published"
+msgstr "Bozza — mai pubblicata"
+
+msgid "Published — outdated"
+msgstr "Pubblicata — obsoleta"
+
+msgid "Saved"
+msgstr "Salvato"
+
+msgid "Glossary"
+msgstr "Glossario"
+
+msgid "History"
+msgstr "Cronologia"
+
+msgid "More actions"
+msgstr "Altre azioni"
+
+msgid "Article settings"
+msgstr "Impostazioni dell'articolo"
+
+msgid "Export the draft as Markdown"
+msgstr "Esporta la bozza in Markdown"
+
+msgid "Export the published version"
+msgstr "Esporta la versione pubblicata"
+
+msgid "Discard unpublished changes"
+msgstr "Scarta le modifiche non pubblicate"
+
+msgid "Unpublish this language"
+msgstr "Ritira questa lingua"
+
+msgid "Delete the article"
+msgstr "Elimina l'articolo"
+
+msgid "This version is outdated"
+msgstr "Questa versione è obsoleta"
+
+msgid ""
+"Another language was updated since this version was published. Bring it up "
+"to date, then publish it as synchronised."
+msgstr ""
+"Un'altra lingua è stata aggiornata dopo la pubblicazione di questa versione. "
+"Aggiornala, poi pubblicala come sincronizzata."
+
+msgid "Reading is restricted to some groups"
+msgstr "La lettura è limitata ad alcuni gruppi"
+
+msgid "Inherited"
+msgstr "Ereditato"
+
+#, python-format
+msgid "Publish the %(language)s version"
+msgstr "Pubblica la versione «%(language)s»"
+
+msgid ""
+"Readers will see this version right away. The previous one is kept in the "
+"history."
+msgstr ""
+"I lettori vedranno subito questa versione. La precedente resta nella "
+"cronologia."
+
+msgid "These settings apply to every language of the article."
+msgstr "Queste impostazioni valgono per tutte le lingue dell'articolo."
+
+msgid "Delete the article?"
+msgstr "Eliminare l'articolo?"
+
+msgid ""
+"Every language, revision and comment of this article is deleted, along with "
+"its sub-articles. This cannot be undone."
+msgstr ""
+"Tutte le lingue, revisioni e commenti di questo articolo vengono eliminati, "
+"insieme ai suoi sotto-articoli. L'operazione è irreversibile."
+
+msgid "Filter…"
+msgstr "Filtra…"
+
+msgid "The glossary is empty."
+msgstr "Il glossario è vuoto."
+
+msgid "Manage the glossary"
+msgstr "Gestisci il glossario"
+
+msgid ""
+"The reference terms of the instance, one column per language, for consistent "
+"translations."
+msgstr ""
+"I termini di riferimento dell'istanza, una colonna per lingua, per "
+"traduzioni coerenti."
+
+msgid "Add a term"
+msgstr "Aggiungi un termine"
+
+msgid "No term matches."
+msgstr "Nessun termine corrisponde."
+
+msgid "Edit a term"
+msgstr "Modifica un termine"
+
+msgid "Delete this term"
+msgstr "Elimina questo termine"
+
+msgid "Back to the editor"
+msgstr "Torna all'editor"
+
+msgid "Live"
+msgstr "Online"
+
+msgid "This version was never published."
+msgstr "Questa versione non è mai stata pubblicata."
+
+msgid "Administration"
+msgstr "Amministrazione"
+
+msgid "Internal portal"
+msgstr "Portale interno"
+
+msgid "Public portal"
+msgstr "Portale pubblico"
+
+msgid "Account menu"
+msgstr "Menu dell'account"
+
+msgid "Profile"
+msgstr "Profilo"
+
+msgid "Change password"
+msgstr "Cambia la password"
+
+msgid "Sign out"
+msgstr "Esci"
+
+msgid "Menu"
+msgstr "Menu"
+
+#, python-format
+msgid "Revision #%(number)s"
+msgstr "Revisione n. %(number)s"
+
+msgid "Restore into the draft"
+msgstr "Ripristina nella bozza"
+
+#, python-format
+msgid "Write the %(language)s version"
+msgstr "Scrivi la versione «%(language)s»"
+
+msgid ""
+"Translations are written by hand. Starting from a copy keeps the structure "
+"and images; translate the text, then publish."
+msgstr ""
+"Le traduzioni sono scritte a mano. Partire da una copia mantiene struttura e "
+"immagini; traduci il testo, poi pubblica."
+
+msgid "Settings saved."
+msgstr "Impostazioni salvate."
+
+msgid "Language added."
+msgstr "Lingua aggiunta."
+
+msgid "At least one language must stay enabled."
+msgstr "Almeno una lingua deve restare attiva."
+
+msgid "Search the glossary…"
+msgstr "Cerca nel glossario…"
+
+msgid "Term added."
+msgstr "Termine aggiunto."
+
+msgid "Term deleted."
+msgstr "Termine eliminato."
+
+msgid "Term saved."
+msgstr "Termine salvato."
+
+msgid "Create the group"
+msgstr "Crea il gruppo"
+
+msgid "Group created."
+msgstr "Gruppo creato."
+
+msgid "Group deleted."
+msgstr "Gruppo eliminato."
+
+msgid "Group updated."
+msgstr "Gruppo aggiornato."
+
+msgid "Invitation sent."
+msgstr "Invito inviato."
+
+msgid "Invitation sent again."
+msgstr "Invito inviato di nuovo."
+
+msgid "Invitation cancelled."
+msgstr "Invito annullato."
+
+msgid "You cannot remove your own administrator access."
+msgstr "Non puoi rimuovere il tuo accesso di amministratore."
+
+msgid "User saved."
+msgstr "Utente salvato."
+
+msgid "Profile saved."
+msgstr "Profilo salvato."
+
+msgid "Editing…"
+msgstr "Modifica in corso…"
+
+msgid "Saving…"
+msgstr "Salvataggio…"
+
+msgid "Not saved — retrying"
+msgstr "Non salvato — nuovo tentativo"
+
+msgid "Untitled"
+msgstr "Senza titolo"
+
+msgid "Write something, or type # for a heading, - for a list…"
+msgstr "Scrivi qualcosa, oppure digita # per un titolo, - per un elenco…"
+
+msgid "Formatting"
+msgstr "Formattazione"
+
+msgid "Undo"
+msgstr "Annulla"
+
+msgid "Redo"
+msgstr "Ripeti"
+
+msgid "Block type"
+msgstr "Tipo di blocco"
+
+msgid "Paragraph"
+msgstr "Paragrafo"
+
+msgid "Heading 1"
+msgstr "Titolo 1"
+
+msgid "Heading 2"
+msgstr "Titolo 2"
+
+msgid "Heading 3"
+msgstr "Titolo 3"
+
+msgid "Bold"
+msgstr "Grassetto"
+
+msgid "Italic"
+msgstr "Corsivo"
+
+msgid "Underline"
+msgstr "Sottolineato"
+
+msgid "Strikethrough"
+msgstr "Barrato"
+
+msgid "Inline code"
+msgstr "Codice in linea"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Link address (leave empty to remove the link)"
+msgstr "Indirizzo del link (lascia vuoto per rimuovere il link)"
+
+msgid "Bulleted list"
+msgstr "Elenco puntato"
+
+msgid "Numbered list"
+msgstr "Elenco numerato"
+
+msgid "Checklist"
+msgstr "Lista di controllo"
+
+msgid "Quote"
+msgstr "Citazione"
+
+msgid "Code block"
+msgstr "Blocco di codice"
+
+msgid "Image"
+msgstr "Immagine"
+
+msgid "Insert…"
+msgstr "Inserisci…"
+
+msgid "Info callout"
+msgstr "Riquadro informazione"
+
+msgid "Success callout"
+msgstr "Riquadro successo"
+
+msgid "Warning callout"
+msgstr "Riquadro avvertenza"
+
+msgid "Danger callout"
+msgstr "Riquadro pericolo"
+
+msgid "Table"
+msgstr "Tabella"
+
+msgid "Divider"
+msgstr "Separatore"
+
+msgid "Add a row"
+msgstr "Aggiungi una riga"
+
+msgid "Add a column"
+msgstr "Aggiungi una colonna"
+
+msgid "Delete the row"
+msgstr "Elimina la riga"
+
+msgid "Delete the column"
+msgstr "Elimina la colonna"
+
+msgid "Delete the table"
+msgstr "Elimina la tabella"
+
+msgid "The upload failed"
+msgstr "Il caricamento non è riuscito"
+
+msgid "Published."
+msgstr "Pubblicato."
+
+msgid "This version is no longer published."
+msgstr "Questa versione non è più pubblicata."
+
+msgid "Draft discarded."
+msgstr "Bozza scartata."
+
+#, python-format
+msgid "Revision #%(number)s loaded into the draft. Publish it to make it live."
+msgstr ""
+"Revisione n. %(number)s caricata nella bozza. Pubblicala per metterla online."
+
+msgid "Article settings saved."
+msgstr "Impostazioni dell'articolo salvate."
+
+msgid "Article deleted, with its sub-articles."
+msgstr "Articolo eliminato, insieme ai suoi sotto-articoli."
+
+msgid "Create the collection"
+msgstr "Crea la raccolta"
+
+msgid "Collection created."
+msgstr "Raccolta creata."
+
+msgid "Collection updated."
+msgstr "Raccolta aggiornata."
+
+msgid "Type the slug of the collection to confirm"
+msgstr "Digita l'identificativo della raccolta per confermare"
+
+msgid "Collection deleted."
+msgstr "Raccolta eliminata."
+
+msgid "Role granted."
+msgstr "Ruolo assegnato."
+
+msgid "Role removed."
+msgstr "Ruolo rimosso."
+
+msgid "Imported from Markdown"
+msgstr "Importato da Markdown"
+
+msgid "Markdown imported."
+msgstr "Markdown importato."
+
+msgid "code"
+msgstr "codice"
+
+msgid "enabled"
+msgstr "attivata"
+
+msgid "languages"
+msgstr "lingue"
+
+msgid "translations"
+msgstr "traduzioni"
+
+msgid "glossary term"
+msgstr "termine del glossario"
+
+msgid "glossary terms"
+msgstr "termini del glossario"
+
+msgid "media file"
+msgstr "file"
+
+msgid "media files"
+msgstr "file"
+
+msgid "This file type is not allowed."
+msgstr "Questo tipo di file non è consentito."
+
+msgid "This file is too large."
+msgstr "Questo file è troppo grande."
+
+msgid "Navigation"
+msgstr "Navigazione"
+
+msgid "This version is not up to date."
+msgstr "Questa versione non è aggiornata."
+
+#, python-format
+msgid "Read the most recent version (%(language)s)"
+msgstr "Leggi la versione più recente (%(language)s)"
+
+#, python-format
+msgid "Not yet available in %(language)s. Showing the %(shown)s version."
+msgstr ""
+"Non ancora disponibile in %(language)s. Viene mostrata la versione "
+"«%(shown)s»."
+
+#, python-format
+msgid "Updated on %(date)s"
+msgstr "Aggiornato il %(date)s"
+
+msgid "Pages"
+msgstr "Pagine"
+
+msgid "Previous"
+msgstr "Precedente"
+
+msgid "Next"
+msgstr "Successivo"
+
+msgid "On this page"
+msgstr "In questa pagina"
+
+#, python-format
+msgid "%(counter)s page"
+msgid_plural "%(counter)s pages"
+msgstr[0] "%(counter)s pagina"
+msgstr[1] "%(counter)s pagine"
+
+msgid "No article is published in this collection yet."
+msgstr "In questa raccolta non è ancora pubblicato alcun articolo."
+
+msgid "Knowledge base"
+msgstr "Base di conoscenza"
+
+msgid "Find the answers you are looking for."
+msgstr "Trova le risposte che cerchi."
+
+msgid "Nothing to read here yet."
+msgstr "Non c'è ancora nulla da leggere."
+
+msgid "Sign in to read the internal documentation"
+msgstr "Accedi per leggere la documentazione interna"
+
+msgid "Most read"
+msgstr "I più letti"
+
+msgid "not translated"
+msgstr "non tradotto"
+
+msgid "Powered by"
+msgstr "Realizzato con"
+
+#, python-format
+msgid "%(counter)s result for “%(query)s”"
+msgid_plural "%(counter)s results for “%(query)s”"
+msgstr[0] "%(counter)s risultato per «%(query)s»"
+msgstr[1] "%(counter)s risultati per «%(query)s»"
+
+msgid "No result. Try other words."
+msgstr "Nessun risultato. Prova con altre parole."
+
+msgid "Search the documentation…"
+msgstr "Cerca nella documentazione…"
+
+msgid "English"
+msgstr "Inglese"
+
+msgid "French"
+msgstr "Francese"
+
+msgid "German"
+msgstr "Tedesco"
+
+msgid "Italian"
+msgstr "Italiano"

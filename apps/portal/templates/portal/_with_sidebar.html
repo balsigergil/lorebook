@@ -1,0 +1,20 @@
+{% extends "portal/layout.html" %}
+{% load i18n %}
+{% block sidebar_toggle %}
+  <button class="btn btn-icon btn-ghost btn-sm reader-sidebar-toggle" data-toggle-class="sidebar-open" data-toggle-target="body" aria-label="{% translate 'Navigation' %}"><i class="fa-solid fa-bars"></i></button>
+{% endblock %}
+{% block reader_body %}
+<div class="reader-body">
+  <aside class="reader-sidebar" id="reader-sidebar" aria-label="{% translate 'Navigation' %}">
+    <a class="reader-sidebar-title" href="{% url 'portal:collection' lang current_collection.slug %}">
+      <i class="fa-solid fa-{{ current_collection.icon|default:'book' }}"></i> {{ current_collection.name }}
+    </a>
+    {% include "portal/_tree.html" with nodes=tree %}
+  </aside>
+  <div class="reader-backdrop" data-toggle-class="sidebar-open" data-toggle-target="body"></div>
+  <main class="reader-main" id="main">
+    {% block content %}{% endblock %}
+  </main>
+  {% block aside %}{% endblock %}
+</div>
+{% endblock %}

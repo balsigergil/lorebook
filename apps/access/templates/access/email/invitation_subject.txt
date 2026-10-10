@@ -1,0 +1,1 @@
+{% load i18n %}{% blocktranslate with site=site_settings.site_name %}You are invited to {{ site }}{% endblocktranslate %}
