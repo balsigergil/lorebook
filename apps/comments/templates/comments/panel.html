@@ -5,7 +5,7 @@
       <i class="fa-regular fa-comments"></i> {% translate "Comments" %}
       {% if open_count %}<span class="tag tag-sm tag-primary">{{ open_count }}</span>{% endif %}
     </h2>
-    <p class="comments-hint">{% translate "Only visible to signed-in users. Never shown on the public portal." %}</p>
+    <p class="comments-hint">{% translate "Only visible to the editors of the collection. Never shown to readers." %}</p>
   </header>
 
   <form class="comment-form" method="post"
@@ -25,6 +25,12 @@
             <div class="comment-meta">
               <strong>{{ comment.author.display_name|default:_("Deleted user") }}</strong>
               <time datetime="{{ comment.created_at|date:'c' }}" title="{{ comment.created_at }}">{% blocktranslate with since=comment.created_at|timesince %}{{ since }} ago{% endblocktranslate %}</time>
+              {% if comment.can_delete %}
+                <form class="comment-delete" method="post" hx-post="{% url 'comments:delete' comment.pk %}" hx-target="#comments-panel" hx-swap="outerHTML" hx-confirm="{% translate 'Delete this comment?' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-icon btn-ghost btn-xs" title="{% translate 'Delete the comment' %}" aria-label="{% translate 'Delete the comment' %}"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              {% endif %}
             </div>
             <div class="comment-text">{{ comment.body|linebreaksbr }}</div>
           </div>
@@ -33,7 +39,7 @@
       <footer class="thread-footer">
         {% if thread.is_resolved %}
           <span class="thread-status"><i class="fa-solid fa-check"></i>
-            {% blocktranslate with name=thread.resolved_by.display_name|default:"—" %}Resolved by {{ name }}{% endblocktranslate %}</span>
+            {% blocktranslate with name=thread.resolved_by.display_name|default:"-" %}Resolved by {{ name }}{% endblocktranslate %}</span>
         {% endif %}
         {% if thread.can_resolve %}
           <form method="post" hx-post="{% url 'comments:resolve' thread.pk %}" hx-target="#comments-panel" hx-swap="outerHTML">

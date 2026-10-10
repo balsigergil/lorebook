@@ -7,7 +7,7 @@
   <header class="editor-header"><div class="editor-header-top">{% include "editor/_article_header.html" %}</div></header>
   <div class="page page-narrow">
     <header class="page-header">
-      <h1 class="page-title">{% translate "History" %} — {{ language_name }}</h1>
+      <h1 class="page-title">{% translate "History" %} - {{ language_name }}</h1>
       <a class="btn btn-ghost" href="{% url 'edit:editor' article.pk language %}"><i class="fa-solid fa-arrow-left"></i> {% translate "Back to the editor" %}</a>
     </header>
     <div class="card">
@@ -21,7 +21,7 @@
                 {% if forloop.first and translation.is_published %}<span class="tag tag-sm tag-success">{% translate "Live" %}</span>{% endif %}
                 <span class="tag tag-sm">{{ revision.get_kind_display }}</span>
               </div>
-              <div class="timeline-meta">{{ revision.author.display_name|default:"—" }} · {{ revision.created_at|date:"DATETIME_FORMAT" }}</div>
+              <div class="timeline-meta">{{ revision.author.display_name|default:"-" }} · {{ revision.created_at|date:"DATETIME_FORMAT" }}</div>
               {% if revision.note %}<p class="timeline-note">{{ revision.note }}</p>{% endif %}
             </div>
           </li>

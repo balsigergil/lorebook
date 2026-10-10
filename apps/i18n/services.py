@@ -1,7 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.db import transaction
 from django.utils.translation import get_language_info
 
-from .models import KNOWN_LANGUAGES, Language
+from apps.analytics.models import DailyViews
+from apps.content.models import Article, ArticleTranslation
+
+from .models import KNOWN_LANGUAGES, GlossaryTerm, Language
 
 CACHE_KEY = "lorebook:languages"
 
@@ -39,6 +44,18 @@ def language_name(code: str) -> str:
         return code
 
 
+def current_language(user) -> str:
+    """The content language a user writes in, chosen in the editor's sidebar."""
+    code = getattr(user, "content_language", "")
+    return code if is_enabled(code) else default_language()
+
+
+def set_current_language(user, code: str) -> None:
+    if is_enabled(code) and user.content_language != code:
+        user.content_language = code
+        user.save(update_fields=["content_language"])
+
+
 def search_config(code: str) -> str:
     return KNOWN_LANGUAGES.get(code, ("", "lorebook_simple"))[1]
 
@@ -69,3 +86,35 @@ def negotiate(accept_language: str) -> str:
 
 def invalidate_cache() -> None:
     cache.delete(CACHE_KEY)
+
+
+@transaction.atomic
+def delete_language(language: Language) -> None:
+    """Delete a language and everything written in it.
+
+    Its article translations go, with their revisions and comments. An article
+    left without any translation goes too, unless a sub-article still has one.
+    """
+    code = language.code
+    translations = ArticleTranslation.objects.filter(language=code)
+    article_ids = set(translations.values_list("article_id", flat=True))
+    translations.delete()
+    while True:
+        # Leaves first: deleting an article deletes its sub-articles.
+        orphans = list(
+            Article.objects.filter(
+                pk__in=article_ids, translations__isnull=True, children__isnull=True
+            ).values_list("pk", flat=True)
+        )
+        if not orphans:
+            break
+        Article.objects.filter(pk__in=orphans).delete()
+    for term in GlossaryTerm.objects.filter(translations__has_key=code):
+        term.translations.pop(code)
+        if any(term.translations.values()):
+            term.save(update_fields=["translations", "updated_at"])
+        else:
+            term.delete()
+    DailyViews.objects.filter(language=code).delete()
+    get_user_model().objects.filter(content_language=code).update(content_language="")
+    language.delete()

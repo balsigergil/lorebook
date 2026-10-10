@@ -12,9 +12,9 @@
     <div class="editor-header-bar">
       <div class="editor-state">
         {% if translation.status == "draft" %}
-          <span class="tag tag-sm"><i class="fa-regular fa-file"></i> {% translate "Draft — never published" %}</span>
+          <span class="tag tag-sm"><i class="fa-regular fa-file"></i> {% translate "Draft, never published" %}</span>
         {% elif translation.status == "outdated" %}
-          <span class="tag tag-sm tag-warning"><i class="fa-solid fa-triangle-exclamation"></i> {% translate "Published — outdated" %}</span>
+          <span class="tag tag-sm tag-warning"><i class="fa-solid fa-triangle-exclamation"></i> {% translate "Published, outdated" %}</span>
         {% else %}
           <span class="tag tag-sm tag-success"><i class="fa-solid fa-check"></i> {% translate "Published" %}</span>
         {% endif %}
@@ -167,7 +167,7 @@
           <thead><tr>{% for language_obj in glossary_languages %}<th{% if language_obj.code == language %} class="highlight-column"{% endif %}>{{ language_obj.code|upper }}</th>{% endfor %}</tr></thead>
           <tbody>
             {% for row in glossary %}
-              <tr>{% for value in row %}<td>{{ value|default:"—" }}</td>{% endfor %}</tr>
+              <tr>{% for value in row %}<td>{{ value|default:"-" }}</td>{% endfor %}</tr>
             {% empty %}
               <tr><td colspan="{{ glossary_languages|length }}" class="text-light">{% translate "The glossary is empty." %}</td></tr>
             {% endfor %}

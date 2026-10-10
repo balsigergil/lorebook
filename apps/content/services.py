@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from django.db import transaction
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -334,3 +334,27 @@ def translations_for_display(
                 (item for item in items if item.language == language), items[0] if items else None
             )
     return result
+
+
+def search_titles(
+    query: str, collections, language: str, limit: int = 20
+) -> list[tuple[Article, ArticleTranslation | None]]:
+    """Articles of `collections` whose title, in any language, contains `query`.
+
+    Accents and case are ignored. Each article comes with the translation
+    to display, in `language` when it exists.
+    """
+    query = query.strip()
+    if not query:
+        return []
+    matching = Q(draft_title__unaccent__icontains=query) | Q(title__unaccent__icontains=query)
+    article_ids = list(
+        ArticleTranslation.objects.filter(matching, article__collection__in=collections)
+        .values_list("article_id", flat=True)
+        .distinct()[:limit]
+    )
+    articles = list(Article.objects.filter(pk__in=article_ids).select_related("collection"))
+    titles = translations_for_display(articles, language, published_only=False)
+    results = [(article, titles.get(article.pk)) for article in articles]
+    results.sort(key=lambda item: (item[1].draft_title if item[1] else item[0].slug).lower())
+    return results

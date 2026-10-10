@@ -1,4 +1,4 @@
-# Lorebook — Document de conception
+# Lorebook - Document de conception
 
 Oct 9, 2026 · @Gil Balsiger
 
@@ -90,7 +90,8 @@ Il n'y a pas de langue source globale. Un article peut être écrit dans n'impor
 
 **Langues**
 
-- Les langues sont activées globalement dans l'administration, pour toutes les collections.
+- Les langues sont activées globalement dans l'administration, pour toutes les collections. Une langue peut être désactivée, ou supprimée avec tous les articles rédigés dans cette langue.
+- Chaque utilisateur a une langue courante, choisie dans la barre latérale de l'éditeur : les articles s'ouvrent et se créent dans cette langue.
 - Un besoin de documentations avec des langues différentes se règle en déployant plusieurs instances.
 - Cas d'usage visé : français, allemand, italien et anglais.
 
@@ -123,9 +124,9 @@ Les droits passent par des groupes qui reçoivent un rôle par collection. Un ar
 
 | Rôle | Peut |
 | --- | --- |
-| Lecteur | Lire les articles de la collection sur le portail interne, commenter |
-| Éditeur | Ce que fait le lecteur, plus créer, modifier, publier, traduire et restaurer des révisions |
-| Admin | Ce que fait l'éditeur, plus gérer les droits de la collection et sa visibilité publique ou privée |
+| Lecteur | Lire les articles de la collection sur le portail interne |
+| Éditeur | Ce que fait le lecteur, plus créer, modifier, publier, traduire, commenter et restaurer des révisions |
+| Admin | Ce que fait l'éditeur, plus gérer les droits de la collection et sa visibilité publique ou privée, et supprimer n'importe quel commentaire |
 
 **Restrictions de lecture**
 
@@ -150,13 +151,13 @@ La recherche de la v1 est un full-text PostgreSQL, sans aucune IA.
 
 ## Commentaires et statistiques
 
-Les commentaires sont des fils de discussion au niveau de l'article, réservés aux utilisateurs internes. Les lectures sont comptées côté serveur, sans cookie.
+Les commentaires sont des fils de discussion au niveau de l'article, réservés à la rédaction. Les lectures sont comptées côté serveur, sans cookie.
 
 **Commentaires**
 
 - Fils de discussion avec réponses et statut « résolu », rattachés à une version linguistique de l'article.
-- Tout utilisateur connecté qui peut lire l'article peut commenter, depuis le portail interne ou l'éditeur.
-- Jamais affichés sur le portail public, même pour un article public.
+- Les éditeurs de la collection commentent depuis l'éditeur. L'auteur d'un commentaire peut le supprimer, un administrateur aussi.
+- Jamais affichés dans les articles rendus, ni sur le portail public ni sur le portail interne.
 - L'ancrage sur une sélection de texte est reporté.
 
 **Statistiques de lecture**

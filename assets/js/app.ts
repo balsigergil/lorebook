@@ -109,8 +109,13 @@ function enhance(root: ParentNode = document) {
     });
   });
 
-  // Fragments returned by the server can ask for their modal to open.
-  root.querySelectorAll<BloumModalElement>(".modal[data-autoshow]").forEach((el) => {
+  // Fragments returned by the server can ask for their modal to open. The
+  // fragment may be the modal itself.
+  const modals = Array.from(root.querySelectorAll<BloumModalElement>(".modal[data-autoshow]"));
+  if (root instanceof HTMLElement && root.matches(".modal[data-autoshow]")) {
+    modals.push(root as BloumModalElement);
+  }
+  modals.forEach((el) => {
     el.removeAttribute("data-autoshow");
     (el.blmodal ?? new Modal(el)).open();
   });
@@ -128,6 +133,19 @@ document.addEventListener("htmx:after:swap", (event) => {
   const form = target?.isConnected ? target : document.querySelector<HTMLElement>(".lore-form .field-danger");
   form?.querySelector<HTMLElement>("[aria-invalid=true], .field-danger .input")?.focus();
 });
+
+// Buttons asking for a confirmation before submitting their form.
+document.addEventListener(
+  "click",
+  (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLElement>("[data-confirm]");
+    if (button && !window.confirm(button.dataset.confirm ?? "")) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  },
+  true,
+);
 
 // Generic class toggles (mobile navigation of the portals).
 document.addEventListener("click", (event) => {

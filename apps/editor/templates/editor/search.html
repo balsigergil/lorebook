@@ -1,0 +1,37 @@
+{% extends "editor/layout.html" %}
+{% load i18n %}
+{% block page_title %}{% translate "Search" %}{% endblock %}
+{% block content %}
+<div class="page page-narrow">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{% translate "Search" %}</h1>
+      <p class="page-subtitle">{% translate "Find an article by its title, in every collection you edit." %}</p>
+    </div>
+  </header>
+  <form method="get" action="{% url 'edit:search' %}" role="search" class="search-form">
+    {{ form }}
+  </form>
+  <div id="search-results">
+  {% partialdef results inline %}
+    {% if query %}
+      <ul class="search-hits">
+        {% for article, translation in results %}
+          <li>
+            <a class="search-hit" href="{% url 'edit:article' article.pk %}">
+              <span class="search-hit-title">{% if translation %}{{ translation.draft_title }}{% else %}{{ article.slug }}{% endif %}</span>
+              <span class="search-hit-meta">
+                <i class="fa-solid fa-{{ article.collection.icon|default:'book' }}"></i> {{ article.collection.name }}
+                {% if translation and translation.language != current_language %}<span class="tag tag-sm">{{ translation.language|upper }}</span>{% endif %}
+              </span>
+            </a>
+          </li>
+        {% empty %}
+          <li class="search-hits-empty">{% translate "No article matches." %}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endpartialdef %}
+  </div>
+</div>
+{% endblock %}

@@ -84,7 +84,21 @@ def test_internal_portal_shows_private_and_public(client, reader, published, pri
     assert "Handbook" in body and "Docs" in body
     response = client.get(internal_url("article", "fr", "handbook", translation.article.slug))
     assert response.status_code == 200
-    assert "comments-placeholder" in response.content.decode()
+
+
+def test_comments_never_shown_to_readers(client, editor, private_collection):
+    from apps.comments.services import start_thread
+
+    translation = content.create_article(private_collection, title="Interne", language="fr")
+    content.publish(translation)
+    start_thread(translation, editor, "Une remarque de relecture")
+    # Not even to an editor reading the internal portal.
+    client.force_login(editor)
+    response = client.get(internal_url("article", "fr", "handbook", translation.article.slug))
+    assert response.status_code == 200
+    body = response.content.decode()
+    assert "Une remarque de relecture" not in body
+    assert reverse("comments:panel", args=[translation.pk]) not in body
 
 
 def test_outsider_cannot_read_private(client, outsider, private_collection):

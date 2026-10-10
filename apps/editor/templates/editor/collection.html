@@ -26,7 +26,7 @@
             <tr>
               <th>{% translate "Article" %}</th>
               <th>{% translate "Languages" %}</th>
-              <th class="text-right">{% translate "Order" %}</th>
+              <th class="text-right">{% translate "Actions" %}</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +47,10 @@
                   </div>
                 </td>
                 <td class="text-right nowrap">
+                  <button type="button" class="btn btn-icon btn-ghost btn-xs"
+                          hx-get="{% url 'edit:article-create' collection.slug %}?parent={{ row.node.article.pk }}"
+                          hx-target="#modal-new-child-article" hx-swap="outerHTML"
+                          title="{% translate 'New sub-article' %}" aria-label="{% translate 'New sub-article' %}"><i class="fa-solid fa-plus"></i></button>
                   <form method="post" action="{% url 'edit:article-reorder' collection.slug row.node.article.pk %}" class="inline-form">
                     {% csrf_token %}
                     <button class="btn btn-icon btn-ghost btn-xs" name="direction" value="up" aria-label="{% translate 'Move up' %}"><i class="fa-solid fa-arrow-up"></i></button>
@@ -68,17 +72,8 @@
   {% endif %}
 </div>
 
-<div class="modal" id="modal-new-article" aria-labelledby="modal-new-article-title">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modal-new-article-title">{% translate "New article" %}</h3>
-      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
-    </div>
-    <div class="modal-body">
-      {% include "core/forms/htmx_form.html" with form=create_form in_modal=True %}
-    </div>
-  </div>
-</div>
+{% include "editor/_article_create_modal.html" with form=create_form modal_id="modal-new-article" %}
+<div id="modal-new-child-article" hidden></div>
 
 <div class="modal" id="modal-import" aria-labelledby="modal-import-title">
   <div class="modal-content">
@@ -87,7 +82,8 @@
       <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
-      <p class="text-light mb-4">{% translate "A leading # heading or a title in the front matter becomes the title of the article. GitHub alerts (> [!NOTE]) become callouts." %}</p>
+      <p class="text-light mb-4">{% blocktranslate with language=language_name %}The article is written in {{ language }}, your current language.{% endblocktranslate %}
+        {% translate "A leading # heading or a title in the front matter becomes the title of the article. GitHub alerts (> [!NOTE]) become callouts." %}</p>
       {% include "core/forms/htmx_form.html" with form=import_form in_modal=True %}
     </div>
   </div>

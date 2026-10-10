@@ -9,7 +9,7 @@
     <header class="page-header">
       <div>
         <h1 class="page-title">{% blocktranslate with number=revision.number %}Revision #{{ number }}{% endblocktranslate %}</h1>
-        <p class="page-subtitle">{{ revision.get_kind_display }} · {{ revision.author.display_name|default:"—" }} · {{ revision.created_at|date:"DATETIME_FORMAT" }}{% if revision.note %} · {{ revision.note }}{% endif %}</p>
+        <p class="page-subtitle">{{ revision.get_kind_display }} · {{ revision.author.display_name|default:"-" }} · {{ revision.created_at|date:"DATETIME_FORMAT" }}{% if revision.note %} · {{ revision.note }}{% endif %}</p>
       </div>
       <div class="page-actions">
         <a class="btn btn-ghost" href="{% url 'edit:history' article.pk language %}"><i class="fa-solid fa-arrow-left"></i> {% translate "History" %}</a>

@@ -20,9 +20,9 @@
         <tbody>
           {% for term, values in rows %}
             <tr>
-              {% for value in values %}<td>{% if value %}{{ value }}{% else %}<span class="text-light">—</span>{% endif %}</td>{% endfor %}
+              {% for value in values %}<td>{% if value %}{{ value }}{% else %}<span class="text-light">-</span>{% endif %}</td>{% endfor %}
               <td class="text-light">{{ term.note|truncatechars:80 }}</td>
-              <td class="text-right"><a class="btn btn-ghost btn-xs" href="{% url 'edit:glossary-edit' term.pk %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a></td>
+              <td class="text-right"><a class="btn btn-ghost btn-sm" href="{% url 'edit:glossary-edit' term.pk %}"><i class="fa-solid fa-pen"></i> {% translate "Edit" %}</a></td>
             </tr>
           {% empty %}
             <tr><td colspan="{{ languages|length|add:2 }}" class="text-light">{% if query %}{% translate "No term matches." %}{% else %}{% translate "The glossary is empty." %}{% endif %}</td></tr>

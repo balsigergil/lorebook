@@ -18,7 +18,6 @@ from django.views.decorators.http import require_GET
 
 from apps.access import services as access
 from apps.analytics import services as analytics
-from apps.comments.services import can_comment
 from apps.content import services as content
 from apps.content.models import Article, ArticleTranslation, Collection
 from apps.content.rendering import excerpt
@@ -198,8 +197,6 @@ def article(request, lang, collection, article):
             "next_node": next_node,
             "can_edit": request.portal == access.INTERNAL
             and access.can_edit_collection(request.user, collection),
-            "can_comment": request.portal == access.INTERNAL
-            and can_comment(request.user, version.translation),
         }
     )
     return render(request, "portal/article.html", context)

@@ -10,12 +10,37 @@
           <span class="brand-mark"><i class="fa-solid fa-book-open"></i></span>
           <span>{{ site_settings.site_name }}</span>
         </a>
+        <div class="sidebar-search">
+          <form method="get" action="{% url 'edit:search' %}" role="search" class="search-form">
+            {{ sidebar_search_form }}
+          </form>
+          <div id="sidebar-search-results" class="sidebar-search-results" aria-live="polite"></div>
+        </div>
         <ul class="sidebar-nav">
           <li class="sidebar-item{% if nav == 'dashboard' %} active{% endif %}">
             <a href="{% url 'edit:dashboard' %}" class="sidebar-link"><i class="fa-solid fa-house fa-fw"></i> {% translate "Dashboard" %}</a>
           </li>
-          <li class="sidebar-item{% if nav == 'glossary' %} active{% endif %}">
-            <a href="{% url 'edit:glossary' %}" class="sidebar-link"><i class="fa-solid fa-spell-check fa-fw"></i> {% translate "Glossary" %}</a>
+          <li class="sidebar-item">
+            <div class="dropdown sidebar-language" id="language-menu">
+              <button type="button" class="sidebar-link" data-menu-toggle aria-label="{% translate 'Current language' %}" title="{% translate 'The language you write in. Articles open in it.' %}">
+                <i class="fa-solid fa-language fa-fw"></i>
+                <span class="truncate">{{ current_language_name }}</span>
+                <i class="fa-solid fa-chevron-down sidebar-hint"></i>
+              </button>
+              <div class="menu">
+                <form method="post" action="{% url 'edit:set-language' %}" class="menu-group">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <div class="menu-label">{% translate "Current language" %}</div>
+                  {% for language_obj in content_languages %}
+                    <button type="submit" class="menu-item{% if language_obj.code == current_language %} active{% endif %}" name="language" value="{{ language_obj.code }}">
+                      <span class="language-code">{{ language_obj.code|upper }}</span> {{ language_obj.name }}
+                      {% if language_obj.code == current_language %}<i class="fa-solid fa-check menu-item-check"></i>{% endif %}
+                    </button>
+                  {% endfor %}
+                </form>
+              </div>
+            </div>
           </li>
         </ul>
         <h3 class="sidebar-group-title">
@@ -37,15 +62,16 @@
             <li class="sidebar-empty">{% translate "No collection yet." %}</li>
           {% endfor %}
         </ul>
-        {% if user_is_admin %}
-          <h3 class="sidebar-group-title">{% translate "Administration" %}</h3>
-          <ul class="sidebar-nav">
+        <h3 class="sidebar-group-title">{% translate "Administration" %}</h3>
+        <ul class="sidebar-nav">
+          <li class="sidebar-item{% if nav == 'glossary' %} active{% endif %}"><a href="{% url 'edit:glossary' %}" class="sidebar-link"><i class="fa-solid fa-spell-check fa-fw"></i> {% translate "Glossary" %}</a></li>
+          {% if user_is_admin %}
             <li class="sidebar-item{% if nav == 'users' %} active{% endif %}"><a href="{% url 'edit:users' %}" class="sidebar-link"><i class="fa-solid fa-user fa-fw"></i> {% translate "Users" %}</a></li>
             <li class="sidebar-item{% if nav == 'groups' %} active{% endif %}"><a href="{% url 'edit:groups' %}" class="sidebar-link"><i class="fa-solid fa-users fa-fw"></i> {% translate "Groups" %}</a></li>
             <li class="sidebar-item{% if nav == 'languages' %} active{% endif %}"><a href="{% url 'edit:languages' %}" class="sidebar-link"><i class="fa-solid fa-language fa-fw"></i> {% translate "Languages" %}</a></li>
             <li class="sidebar-item{% if nav == 'settings' %} active{% endif %}"><a href="{% url 'edit:settings' %}" class="sidebar-link"><i class="fa-solid fa-gear fa-fw"></i> {% translate "Settings" %}</a></li>
-          </ul>
-        {% endif %}
+          {% endif %}
+        </ul>
       </div>
       <div class="sidebar-bottom">
         <ul class="sidebar-nav">

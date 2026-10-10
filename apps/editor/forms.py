@@ -14,10 +14,6 @@ from apps.i18n.services import enabled_languages
 RESERVED_SLUGS = {"search", "static", "api", "files", "accounts", "comments", "edit", "internal"}
 
 
-def language_choices():
-    return [(language.code, language.name) for language in enabled_languages()]
-
-
 class CollectionForm(LoreModelForm):
     class Meta:
         model = Collection
@@ -64,23 +60,21 @@ class CollectionRoleForm(LoreForm):
 
 
 class ArticleCreateForm(LoreForm):
+    """A new article, written in the user's current language."""
+
     submit_label = _("Create")
 
     title = forms.CharField(label=_("Title"), max_length=300)
-    language = forms.ChoiceField(label=_("Language"))
     parent = forms.ModelChoiceField(
         label=_("Parent article"),
         queryset=Article.objects.none(),
         required=False,
-        empty_label=_("— At the root of the collection —"),
+        empty_label=_("At the root of the collection"),
     )
 
-    def __init__(self, *args, collection: Collection, language: str | None = None, **kwargs):
+    def __init__(self, *args, collection: Collection, **kwargs):
         self.collection = collection
         super().__init__(*args, **kwargs)
-        self.fields["language"].choices = language_choices()
-        if language:
-            self.fields["language"].initial = language
         self.fields["parent"].queryset = collection.articles.all()
         self.fields["parent"].label_from_instance = article_label
 
@@ -89,7 +83,7 @@ def article_label(article: Article) -> str:
     translation = article.translations.order_by("-published_at").first()
     title = translation.display_title if translation else article.slug
     depth = len(article.ancestors())
-    return f"{'— ' * depth}{title}"
+    return f"{'- ' * depth}{title}"
 
 
 class ArticleSettingsForm(LoreModelForm):
@@ -104,7 +98,7 @@ class ArticleSettingsForm(LoreModelForm):
         excluded = content.descendant_ids(article) | {article.pk}
         self.fields["parent"].queryset = article.collection.articles.exclude(pk__in=excluded)
         self.fields["parent"].label_from_instance = article_label
-        self.fields["parent"].empty_label = _("— At the root of the collection —")
+        self.fields["parent"].empty_label = _("At the root of the collection")
         self.fields["read_groups"].required = False
 
     def clean_slug(self):
@@ -137,8 +131,8 @@ class PublishForm(LoreForm):
         label=_("Kind of change"),
         widget=forms.RadioSelect,
         choices=[
-            ("update", _("Content update — the other languages become outdated")),
-            ("minor", _("Minor change (typo, formatting) — nothing becomes outdated")),
+            ("update", _("Content update - the other languages become outdated")),
+            ("minor", _("Minor change (typo, formatting) - nothing becomes outdated")),
         ],
         initial="update",
     )
@@ -153,7 +147,7 @@ class PublishForm(LoreForm):
         super().__init__(*args, **kwargs)
         if outdated:
             self.fields["kind"].choices = [
-                ("sync", _("Translation brought up to date — mark this version as synchronised")),
+                ("sync", _("Translation brought up to date - mark this version as synchronised")),
                 *self.fields["kind"].choices,
             ]
             self.fields["kind"].initial = "sync"
@@ -181,18 +175,16 @@ class MarkdownImportForm(LoreForm):
         label=_("Markdown file"),
         validators=[FileExtensionValidator(["md", "markdown", "txt"])],
     )
-    language = forms.ChoiceField(label=_("Language"))
     parent = forms.ModelChoiceField(
         label=_("Parent article"),
         queryset=Article.objects.none(),
         required=False,
-        empty_label=_("— At the root of the collection —"),
+        empty_label=_("At the root of the collection"),
     )
     publish = forms.BooleanField(label=_("Publish right away"), required=False)
 
     def __init__(self, *args, collection: Collection, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["language"].choices = language_choices()
         self.fields["parent"].queryset = collection.articles.all()
         self.fields["parent"].label_from_instance = article_label
 

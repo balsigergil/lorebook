@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="modal" id="{{ modal_id }}" aria-labelledby="{{ modal_id }}-title"{% if autoshow %} data-autoshow{% endif %}>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="{{ modal_id }}-title">{% translate "New article" %}</h3>
+      <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="text-light mb-4">{% blocktranslate with language=language_name %}The article is written in {{ language }}, your current language.{% endblocktranslate %}</p>
+      {% include "core/forms/htmx_form.html" with in_modal=True %}
+    </div>
+  </div>
+</div>

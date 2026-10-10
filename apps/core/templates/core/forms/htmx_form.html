@@ -17,6 +17,11 @@
   {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
   {{ form }}
   <div class="form-actions">
+    {% if form.delete_label %}
+      <button type="submit" name="delete" value="1" formnovalidate class="btn btn-outline btn-danger form-action-start"{% if form.delete_confirm %} data-confirm="{{ form.delete_confirm }}"{% endif %}>
+        <i class="fa-solid fa-trash"></i> {{ form.delete_label }}
+      </button>
+    {% endif %}
     {% if form.cancel_url %}
       <a href="{{ form.cancel_url }}" class="btn btn-ghost">{% translate "Cancel" %}</a>
     {% elif in_modal %}

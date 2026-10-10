@@ -3,9 +3,13 @@ from functools import wraps
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from apps.access import services as access
 from apps.content.models import Article, Collection
+from apps.core.forms import SearchForm
+from apps.i18n import services as i18n
 
 
 def editor_required(view):
@@ -55,5 +59,25 @@ def get_article(request, pk: int) -> Article:
     return article
 
 
+def search_form(data=None, *, auto_id: str) -> SearchForm:
+    """The search of articles by title, across every editable collection."""
+    form = SearchForm(data, placeholder=_("Search articles…"), auto_id=auto_id)
+    form.fields["q"].widget.attrs.update(
+        {
+            "hx-get": reverse("edit:search"),
+            "hx-trigger": "input changed delay:250ms, search",
+            "hx-target": "#sidebar-search-results",
+            "hx-swap": "innerHTML",
+        }
+    )
+    return form
+
+
 def sidebar_context(request) -> dict:
-    return {"editable_collections": list(access.editable_collections(request.user))}
+    language = i18n.current_language(request.user)
+    return {
+        "editable_collections": list(access.editable_collections(request.user)),
+        "sidebar_search_form": search_form(auto_id="id_sidebar_%s"),
+        "current_language": language,
+        "current_language_name": i18n.language_name(language),
+    }
