@@ -26,6 +26,7 @@
                   <button class="btn btn-icon btn-ghost btn-xs" name="action" value="down" aria-label="{% translate 'Move down' %}"><i class="fa-solid fa-arrow-down"></i></button>
                   <button class="btn btn-ghost btn-xs" name="action" value="toggle">{% if language.enabled %}{% translate "Disable" %}{% else %}{% translate "Enable" %}{% endif %}</button>
                 </form>
+                <button type="button" class="btn btn-ghost btn-xs text-danger" data-modal="#modal-delete-language-{{ language.pk }}">{% translate "Delete" %}</button>
               </td>
             </tr>
           {% endfor %}
@@ -33,6 +34,20 @@
       </table>
     </div>
   </div>
+  {% for language in languages %}
+    <div class="modal" id="modal-delete-language-{{ language.pk }}" aria-labelledby="modal-delete-language-{{ language.pk }}-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-delete-language-{{ language.pk }}-title">{% blocktranslate with name=language.name %}Delete {{ name }}?{% endblocktranslate %}</h3>
+          <button type="button" class="btn btn-icon btn-ghost" aria-label="{% translate 'Close' %}" data-modal-close><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-4">{% translate "Every article translation written in this language is deleted, with its history and comments. Articles that only exist in this language are deleted too. This cannot be undone. To hide the language without losing anything, disable it instead." %}</p>
+          {% include "core/forms/htmx_form.html" with form=language.delete_form in_modal=True %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
   {% if form.fields.code.choices %}
     <div class="card">
       <div class="card-header"><h2 class="card-title">{% translate "Add a language" %}</h2></div>

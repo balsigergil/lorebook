@@ -64,12 +64,6 @@
       </a>
     {% endif %}
   </nav>
-
-  {% if can_comment %}
-    <div hx-get="{% url 'comments:panel' translation.pk %}" hx-trigger="revealed" hx-swap="outerHTML" class="comments-placeholder">
-      <div class="spinner"></div>
-    </div>
-  {% endif %}
 </div>
 {% endblock %}
 {% block aside %}

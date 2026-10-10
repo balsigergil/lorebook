@@ -10,11 +10,11 @@ from django.views.decorators.http import require_GET, require_http_methods, requ
 
 from apps.access import services_accounts as accounts
 from apps.access.models import Invitation, User
-from apps.core.forms import SearchForm
+from apps.core.forms import ConfirmForm, SearchForm
 from apps.core.models import SiteSettings
 from apps.core.views import form_invalid, htmx_redirect
+from apps.i18n import services as i18n
 from apps.i18n.models import GlossaryTerm, Language
-from apps.i18n.services import enabled_languages
 
 from ..forms import (
     GlossaryTermForm,
@@ -63,13 +63,33 @@ def languages(request):
         form.save()
         messages.success(request, _("Language added."))
         return htmx_redirect(request, form.action)
-    return page(
-        request,
-        "editor/admin/languages.html",
-        "languages",
-        languages=Language.objects.all(),
-        form=form,
-    )
+    languages = list(Language.objects.all())
+    for language in languages:
+        language.delete_form = language_delete_form(language)
+    return page(request, "editor/admin/languages.html", "languages", languages=languages, form=form)
+
+
+def language_delete_form(language, data=None) -> ConfirmForm:
+    form = ConfirmForm(data, expected=language.code, prefix=f"delete-{language.pk}")
+    form.action = reverse("edit:language-delete", args=[language.pk])
+    form.fields["confirm"].label = _("Type the code of the language to confirm")
+    form.fields["confirm"].widget.attrs["placeholder"] = language.code
+    return form
+
+
+@require_POST
+@admin_required
+def language_delete(request, pk):
+    language = get_object_or_404(Language, pk=pk)
+    form = language_delete_form(language, request.POST)
+    if not form.is_valid():
+        return form_invalid(request, form, context={"in_modal": True})
+    if language.enabled and Language.objects.filter(enabled=True).count() == 1:
+        form.add_error(None, _("At least one language must stay enabled."))
+        return form_invalid(request, form, context={"in_modal": True})
+    i18n.delete_language(language)
+    messages.success(request, _("Language deleted, with the articles written in it."))
+    return htmx_redirect(request, reverse("edit:languages"))
 
 
 @require_POST
@@ -93,9 +113,7 @@ def language_update(request, pk):
                 item.position = position
             Language.objects.bulk_update(ordered, ["position"])
             # bulk_update skips signals: refresh the cached list explicitly.
-            from apps.i18n.services import invalidate_cache
-
-            invalidate_cache()
+            i18n.invalidate_cache()
     return htmx_redirect(request, reverse("edit:languages"))
 
 
@@ -117,7 +135,7 @@ def glossary(request):
             for term in terms
             if any(query in value.lower() for value in term.translations.values())
         ]
-    languages = enabled_languages()
+    languages = i18n.enabled_languages()
     rows = [
         (term, [term.translations.get(language.code, "") for language in languages])
         for term in terms
@@ -153,6 +171,8 @@ def glossary_edit(request, pk):
     term = get_object_or_404(GlossaryTerm, pk=pk)
     form = GlossaryTermForm(request.POST or None, instance=term)
     form.cancel_url = reverse("edit:glossary")
+    form.delete_label = _("Delete this term")
+    form.delete_confirm = _("Delete this term?")
     if request.method == "POST":
         if request.POST.get("delete") == "1":
             term.delete()

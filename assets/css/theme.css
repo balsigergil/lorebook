@@ -72,8 +72,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
+/* Links take the color of the text around them; links styled as buttons keep theirs. */
+a:where(:not(.btn)) {
   color: inherit;
+}
+
+/* Menu entries, whether links or buttons, always start on the left. */
+.menu-item {
+  justify-content: flex-start;
+  text-align: start;
 }
 
 .btn {
@@ -161,6 +168,10 @@ a {
   justify-content: flex-end;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.form-actions .form-action-start {
+  margin-right: auto;
 }
 
 .form-errors {
@@ -481,6 +492,93 @@ a {
   font-size: var(--bl-fs-xs);
 }
 
+.sidebar-search {
+  position: relative;
+  padding: 0 0.5rem 0.5rem;
+}
+
+.sidebar-search-results:empty {
+  display: none;
+}
+
+.sidebar-search-results {
+  margin-top: 0.25rem;
+  max-height: 50vh;
+  overflow-y: auto;
+  background: var(--lb-surface);
+  border: 1px solid var(--lb-border);
+  border-radius: var(--bl-border-radius-xl);
+  box-shadow: var(--bl-shadow-lg);
+}
+
+.search-hits {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem;
+}
+
+.search-hit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--bl-border-radius-lg);
+  text-decoration: none;
+}
+
+.search-hit:hover,
+.search-hit:focus-visible {
+  background: var(--lb-surface-hover);
+}
+
+.search-hit-title {
+  font-weight: 500;
+}
+
+.search-hit-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--lb-text-subtle);
+  font-size: var(--bl-fs-sm);
+}
+
+.search-hits-empty {
+  padding: 0.5rem 0.6rem;
+  color: var(--lb-text-subtle);
+  font-size: var(--bl-fs-sm);
+}
+
+#search-results .search-hits {
+  margin-top: 1rem;
+  padding: 0;
+}
+
+.sidebar-language {
+  display: block;
+}
+
+.sidebar-language > .sidebar-link {
+  width: 100%;
+}
+
+.sidebar-language .menu {
+  min-width: 14rem;
+}
+
+.language-code {
+  display: inline-block;
+  min-width: 1.75rem;
+  color: var(--lb-text-subtle);
+  font-size: var(--bl-fs-xs);
+  font-weight: 600;
+}
+
+.menu-item-check {
+  margin-left: auto;
+  color: var(--lb-accent);
+}
+
 .sidebar-empty {
   padding: 0.25rem 1rem;
   color: var(--lb-text-subtle);
@@ -559,6 +657,11 @@ a {
   font-weight: 700;
   margin: 0.25rem 0 0;
   letter-spacing: -0.01em;
+}
+
+/* Optical centering: the badge lines up with the lowercase letters of the title. */
+.page-title .tag {
+  margin-top: 0.2em;
 }
 
 .page-title-icon {
@@ -774,6 +877,11 @@ main.main.main-editor {
   flex-wrap: wrap;
 }
 
+/* Pages without the action bar (history, revision): keep the border off the tabs. */
+.editor-header-top:last-child {
+  padding-bottom: 0.75rem;
+}
+
 .editor-header-bar {
   display: flex;
   justify-content: space-between;
@@ -794,6 +902,10 @@ main.main.main-editor {
   align-items: center;
   gap: 0.25rem;
   flex-wrap: wrap;
+}
+
+.editor-actions .menu {
+  min-width: 16rem;
 }
 
 .save-status {
@@ -1487,18 +1599,9 @@ details[open] > summary .nav-tree-chevron {
 /* Comments */
 
 .comments {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--lb-border);
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.drawer .comments {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: 0;
 }
 
 .comments-title {
@@ -1567,6 +1670,11 @@ details[open] > summary .nav-tree-chevron {
   color: var(--lb-text-subtle);
 }
 
+.comment-delete {
+  margin-left: auto;
+  align-self: center;
+}
+
 .comment-text {
   margin-top: 0.15rem;
   overflow-wrap: anywhere;
@@ -1583,12 +1691,6 @@ details[open] > summary .nav-tree-chevron {
   color: var(--lb-status-published);
   font-size: var(--bl-fs-sm);
   margin-right: auto;
-}
-
-.comments-placeholder {
-  display: grid;
-  place-items: center;
-  padding: 2rem;
 }
 
 .mb-4 {

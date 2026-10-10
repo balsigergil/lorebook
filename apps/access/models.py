@@ -44,6 +44,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_active = models.BooleanField(_("active"), default=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    # Language the user writes in: the editor opens articles in it.
+    content_language = models.CharField(_("content language"), max_length=8, blank=True)
 
     objects = UserManager()
 
@@ -110,7 +112,7 @@ class CollectionRole(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.group} — {self.get_role_display()} — {self.collection}"
+        return f"{self.group} - {self.get_role_display()} - {self.collection}"
 
 
 def _invitation_token() -> str:

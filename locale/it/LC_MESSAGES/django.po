@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lorebook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 00:26+0200\n"
+"POT-Creation-Date: 2026-10-10 10:28+0200\n"
 "PO-Revision-Date: 2026-10-10 00:00+0200\n"
 "Last-Translator: Lorebook\n"
 "Language-Team: Italian\n"
@@ -50,6 +50,9 @@ msgstr "attivo"
 
 msgid "date joined"
 msgstr "data di iscrizione"
+
+msgid "content language"
+msgstr "lingua di redazione"
 
 msgid "user"
 msgstr "utente"
@@ -161,8 +164,8 @@ msgstr "commenti"
 msgid "Comments"
 msgstr "Commenti"
 
-msgid "Only visible to signed-in users. Never shown on the public portal."
-msgstr "Visibili solo agli utenti connessi. Mai mostrati sul portale pubblico."
+msgid "Only visible to the editors of the collection. Never shown to readers."
+msgstr "Visibili solo agli editor della raccolta. Mai mostrati ai lettori."
 
 msgid "Deleted user"
 msgstr "Utente eliminato"
@@ -170,6 +173,12 @@ msgstr "Utente eliminato"
 #, python-format
 msgid "%(since)s ago"
 msgstr "%(since)s fa"
+
+msgid "Delete this comment?"
+msgstr "Eliminare questo commento?"
+
+msgid "Delete the comment"
+msgstr "Elimina il commento"
 
 #, python-format
 msgid "Resolved by %(name)s"
@@ -380,14 +389,11 @@ msgstr "Crea"
 msgid "Title"
 msgstr "Titolo"
 
-msgid "Language"
-msgstr "Lingua"
-
 msgid "Parent article"
 msgstr "Articolo padre"
 
-msgid "— At the root of the collection —"
-msgstr "— Alla radice della raccolta —"
+msgid "At the root of the collection"
+msgstr "Alla radice della raccolta"
 
 msgid "Another article of this collection uses this slug."
 msgstr "Un altro articolo di questa raccolta usa questo identificativo."
@@ -398,11 +404,11 @@ msgstr "Pubblica"
 msgid "Kind of change"
 msgstr "Tipo di modifica"
 
-msgid "Content update — the other languages become outdated"
-msgstr "Aggiornamento del contenuto — le altre lingue diventano obsolete"
+msgid "Content update - the other languages become outdated"
+msgstr "Aggiornamento del contenuto - le altre lingue diventano obsolete"
 
-msgid "Minor change (typo, formatting) — nothing becomes outdated"
-msgstr "Modifica minore (refuso, formattazione) — nulla diventa obsoleto"
+msgid "Minor change (typo, formatting) - nothing becomes outdated"
+msgstr "Modifica minore (refuso, formattazione) - nulla diventa obsoleto"
 
 msgid "Note"
 msgstr "Nota"
@@ -410,8 +416,8 @@ msgstr "Nota"
 msgid "Optional, shown in the history."
 msgstr "Facoltativa, mostrata nella cronologia."
 
-msgid "Translation brought up to date — mark this version as synchronised"
-msgstr "Traduzione aggiornata — segna questa versione come sincronizzata"
+msgid "Translation brought up to date - mark this version as synchronised"
+msgstr "Traduzione aggiornata - segna questa versione come sincronizzata"
 
 msgid "Create this translation"
 msgstr "Crea questa traduzione"
@@ -461,6 +467,9 @@ msgstr "Inserisci solo un nome di dominio, ad es. docs.esempio.ch."
 msgid "Add"
 msgstr "Aggiungi"
 
+msgid "Language"
+msgstr "Lingua"
+
 msgid "User"
 msgstr "Utente"
 
@@ -476,6 +485,16 @@ msgstr "Amministratore dell'istanza"
 msgid "Manages languages, groups, users and settings, and edits everything."
 msgstr ""
 "Gestisce lingue, gruppi, utenti e impostazioni, e può modificare tutto."
+
+msgid "New article"
+msgstr "Nuovo articolo"
+
+msgid "Close"
+msgstr "Chiudi"
+
+#, python-format
+msgid "The article is written in %(language)s, your current language."
+msgstr "L'articolo viene scritto nella tua lingua corrente: %(language)s."
 
 msgid "Languages"
 msgstr "Lingue"
@@ -590,6 +609,21 @@ msgstr "Disattiva"
 msgid "Enable"
 msgstr "Attiva"
 
+#, python-format
+msgid "Delete %(name)s?"
+msgstr "Eliminare %(name)s?"
+
+msgid ""
+"Every article translation written in this language is deleted, with its "
+"history and comments. Articles that only exist in this language are deleted "
+"too. This cannot be undone. To hide the language without losing anything, "
+"disable it instead."
+msgstr ""
+"Tutte le traduzioni di articoli scritte in questa lingua vengono eliminate, "
+"insieme alla cronologia e ai commenti. Anche gli articoli che esistono solo "
+"in questa lingua vengono eliminati. L'operazione è irreversibile. Per "
+"nascondere la lingua senza perdere nulla, disattivala invece."
+
 msgid "Add a language"
 msgstr "Aggiungi una lingua"
 
@@ -658,12 +692,6 @@ msgstr "Invia di nuovo"
 msgid "Invite someone"
 msgstr "Invita qualcuno"
 
-msgid "Close"
-msgstr "Chiudi"
-
-msgid "New article"
-msgstr "Nuovo articolo"
-
 msgid "Import Markdown"
 msgstr "Importa Markdown"
 
@@ -682,11 +710,11 @@ msgstr "Mancante"
 msgid "Article"
 msgstr "Articolo"
 
-msgid "Order"
-msgstr "Ordine"
-
 msgid "Reading restricted to some groups"
 msgstr "Lettura limitata ad alcuni gruppi"
+
+msgid "New sub-article"
+msgstr "Nuovo sotto-articolo"
 
 msgid "This collection has no article yet."
 msgstr "Questa raccolta non ha ancora articoli."
@@ -780,11 +808,8 @@ msgstr[1] "%(counter)s letture"
 msgid "No reads yet."
 msgstr "Ancora nessuna lettura."
 
-msgid "Draft — never published"
-msgstr "Bozza — mai pubblicata"
-
-msgid "Published — outdated"
-msgstr "Pubblicata — obsoleta"
+msgid "Published, outdated"
+msgstr "Pubblicata, obsoleta"
 
 msgid "Saved"
 msgstr "Salvato"
@@ -881,9 +906,6 @@ msgstr "Nessun termine corrisponde."
 msgid "Edit a term"
 msgstr "Modifica un termine"
 
-msgid "Delete this term"
-msgstr "Elimina questo termine"
-
 msgid "Back to the editor"
 msgstr "Torna all'editor"
 
@@ -892,6 +914,12 @@ msgstr "Online"
 
 msgid "This version was never published."
 msgstr "Questa versione non è mai stata pubblicata."
+
+msgid "Current language"
+msgstr "Lingua corrente"
+
+msgid "The language you write in. Articles open in it."
+msgstr "La lingua in cui scrivi. Gli articoli si aprono in questa lingua."
 
 msgid "Administration"
 msgstr "Amministrazione"
@@ -924,6 +952,12 @@ msgstr "Revisione n. %(number)s"
 msgid "Restore into the draft"
 msgstr "Ripristina nella bozza"
 
+msgid "Find an article by its title, in every collection you edit."
+msgstr "Trova un articolo dal suo titolo, in tutte le raccolte che modifichi."
+
+msgid "No article matches."
+msgstr "Nessun articolo corrisponde."
+
 #, python-format
 msgid "Write the %(language)s version"
 msgstr "Scrivi la versione «%(language)s»"
@@ -941,14 +975,26 @@ msgstr "Impostazioni salvate."
 msgid "Language added."
 msgstr "Lingua aggiunta."
 
+msgid "Type the code of the language to confirm"
+msgstr "Digita il codice della lingua per confermare"
+
 msgid "At least one language must stay enabled."
 msgstr "Almeno una lingua deve restare attiva."
+
+msgid "Language deleted, with the articles written in it."
+msgstr "Lingua eliminata, insieme agli articoli scritti in essa."
 
 msgid "Search the glossary…"
 msgstr "Cerca nel glossario…"
 
 msgid "Term added."
 msgstr "Termine aggiunto."
+
+msgid "Delete this term"
+msgstr "Elimina questo termine"
+
+msgid "Delete this term?"
+msgstr "Eliminare questo termine?"
 
 msgid "Term deleted."
 msgstr "Termine eliminato."
@@ -992,8 +1038,8 @@ msgstr "Modifica in corso…"
 msgid "Saving…"
 msgstr "Salvataggio…"
 
-msgid "Not saved — retrying"
-msgstr "Non salvato — nuovo tentativo"
+msgid "Not saved, retrying"
+msgstr "Non salvato, nuovo tentativo"
 
 msgid "Untitled"
 msgstr "Senza titolo"
@@ -1149,6 +1195,9 @@ msgstr "Importato da Markdown"
 
 msgid "Markdown imported."
 msgstr "Markdown importato."
+
+msgid "Search articles…"
+msgstr "Cerca articoli…"
 
 msgid "code"
 msgstr "codice"

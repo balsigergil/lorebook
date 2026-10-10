@@ -1,11 +1,13 @@
 from django.urls import path
 
-from .views import admin, articles, collections, dashboard
+from .views import admin, articles, collections, dashboard, navigation
 
 app_name = "edit"
 
 urlpatterns = [
     path("", dashboard.dashboard, name="dashboard"),
+    path("search/", navigation.search, name="search"),
+    path("language/", navigation.set_language, name="set-language"),
     # Collections
     path("collections/new/", collections.collection_create, name="collection-create"),
     path("c/<slug:slug>/", collections.collection_detail, name="collection"),
@@ -53,6 +55,7 @@ urlpatterns = [
     path("settings/", admin.site_settings, name="settings"),
     path("settings/languages/", admin.languages, name="languages"),
     path("settings/languages/<int:pk>/", admin.language_update, name="language-update"),
+    path("settings/languages/<int:pk>/delete/", admin.language_delete, name="language-delete"),
     path("settings/groups/", admin.groups, name="groups"),
     path("settings/groups/<int:pk>/", admin.group_detail, name="group"),
     path("settings/users/", admin.users, name="users"),

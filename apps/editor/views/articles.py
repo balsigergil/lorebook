@@ -52,7 +52,7 @@ def editor_strings() -> dict[str, str]:
         "changed": _("Unpublished changes"),
         "pending": _("Editing…"),
         "saving": _("Saving…"),
-        "error": _("Not saved — retrying"),
+        "error": _("Not saved, retrying"),
         "title": _("Title"),
         "titlePlaceholder": _("Untitled"),
         "placeholder": _("Write something, or type # for a heading, - for a list…"),
@@ -97,20 +97,15 @@ def editor_strings() -> dict[str, str]:
 @editor_required
 def article_redirect(request, pk):
     article = get_article(request, pk)
-    codes = i18n.enabled_codes()
-    translation = (
-        article.translations.filter(language=i18n.default_language()).first()
-        or article.translations.filter(language__in=codes).first()
-        or article.translations.first()
-    )
-    language = translation.language if translation else i18n.default_language()
-    return redirect("edit:editor", pk=article.pk, lang=language)
+    return redirect("edit:editor", pk=article.pk, lang=i18n.current_language(request.user))
 
 
 @require_GET
 @editor_required
 def editor(request, pk, lang):
     article = get_article(request, pk)
+    # Opening an article in a language makes it the user's current language.
+    i18n.set_current_language(request.user, lang)
     context = article_context(request, article, lang)
     translation = context["translations"].get(lang)
     if translation is None:

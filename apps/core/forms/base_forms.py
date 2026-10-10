@@ -71,7 +71,9 @@ class LoreFormMixin:
 
     Options a view can set on an instance before rendering:
     `action` (URL posted to), `submit_label`, `cancel_url`, `form_id`,
-    `danger` (destructive submit button).
+    `danger` (destructive submit button), `delete_label` (a second submit
+    button, posting `delete=1`, at the start of the actions) and
+    `delete_confirm` (the question it asks first).
     """
 
     template_name_div = "core/forms/form.html"
@@ -81,6 +83,8 @@ class LoreFormMixin:
     cancel_url = ""
     danger = False
     form_id = ""
+    delete_label = ""
+    delete_confirm = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

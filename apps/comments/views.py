@@ -7,7 +7,7 @@ from apps.content.models import ArticleTranslation
 
 from . import services
 from .forms import CommentForm, ReplyForm
-from .models import Thread
+from .models import Comment, Thread
 
 
 def readable_translation(request, translation_id: int) -> ArticleTranslation:
@@ -27,6 +27,10 @@ def render_panel(request, translation, *, form=None, reply_forms=None, status=20
             prefix=f"reply-{thread.pk}", auto_id=f"id_reply_{thread.pk}_%s"
         )
         thread.can_resolve = services.can_resolve(request.user, thread)
+        for comment in thread.comments.all():
+            comment.can_delete = services.can_delete(
+                request.user, comment, translation.article.collection
+            )
     context = {
         "translation": translation,
         "threads": threads,
@@ -71,4 +75,16 @@ def resolve(request, thread_id):
     if not services.can_resolve(request.user, thread):
         return HttpResponseForbidden()
     services.set_resolved(thread, request.user, request.POST.get("resolved") == "1")
+    return render_panel(request, translation)
+
+
+@require_POST
+def delete(request, comment_id):
+    if not access.is_authenticated(request.user):
+        return HttpResponseForbidden()
+    comment = get_object_or_404(Comment.objects.select_related("thread"), pk=comment_id)
+    translation = readable_translation(request, comment.thread.translation_id)
+    if not services.can_delete(request.user, comment, translation.article.collection):
+        return HttpResponseForbidden()
+    services.delete_comment(comment)
     return render_panel(request, translation)

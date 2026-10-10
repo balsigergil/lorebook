@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -13,7 +14,7 @@ from apps.content import services as content
 from apps.content.models import ArticleTranslation
 from apps.core.forms import ConfirmForm
 from apps.core.views import form_invalid, htmx_redirect
-from apps.i18n.services import default_language, enabled_languages
+from apps.i18n.services import current_language, enabled_languages, language_name
 
 from ..forms import ArticleCreateForm, CollectionForm, CollectionRoleForm, MarkdownImportForm
 from .common import admin_required, editor_required, get_collection, sidebar_context
@@ -73,13 +74,11 @@ def status_matrix(collection, tree_nodes):
 @editor_required
 def collection_detail(request, slug):
     collection = get_collection(request, slug)
-    language = request.GET.get("lang") or default_language()
+    language = current_language(request.user)
     articles = list(collection.articles.all())
     titles = content.translations_for_display(articles, language, published_only=False)
     tree = content.build_tree(articles, titles)
-    create_form = ArticleCreateForm(collection=collection, language=language)
-    create_form.action = reverse("edit:article-create", args=[collection.slug])
-    import_form = MarkdownImportForm(collection=collection, initial={"language": language})
+    import_form = MarkdownImportForm(collection=collection)
     import_form.action = reverse("edit:import", args=[collection.slug])
     context = {
         **sidebar_context(request),
@@ -87,7 +86,8 @@ def collection_detail(request, slug):
         "rows": status_matrix(collection, tree),
         "languages": enabled_languages(),
         "language": language,
-        "create_form": create_form,
+        "language_name": language_name(language),
+        "create_form": article_create_form(collection),
         "import_form": import_form,
         "can_admin": access.can_admin_collection(request.user, collection),
         "nav": f"collection-{collection.pk}",
@@ -176,18 +176,52 @@ def collection_role_delete(request, slug, pk):
     return htmx_redirect(request, reverse("edit:collection-permissions", args=[collection.slug]))
 
 
-@require_POST
+def article_create_form(collection, data=None, *, child=False, **kwargs) -> ArticleCreateForm:
+    """The form of the "New article" modal, or of the "+" modal of a row (`child`).
+
+    Both modals live on the same page: the second one gets its own ids.
+    """
+    action = reverse("edit:article-create", args=[collection.slug])
+    if child:
+        kwargs["auto_id"] = "id_child_%s"
+        action += "?child=1"
+    form = ArticleCreateForm(data, collection=collection, **kwargs)
+    form.action = action
+    if child:
+        form.form_id = "form-child-article"
+    return form
+
+
+@require_http_methods(["GET", "POST"])
 @editor_required
 def article_create(request, slug):
     collection = get_collection(request, slug)
-    form = ArticleCreateForm(request.POST, collection=collection)
-    form.action = reverse("edit:article-create", args=[collection.slug])
+    language = current_language(request.user)
+    if request.method == "GET":
+        # The "+" of a row of the article table: the same modal, with the
+        # parent article already selected, opened as soon as it is swapped in.
+        parent_id = request.GET.get("parent", "")
+        if not parent_id.isdigit():
+            raise Http404
+        parent = get_object_or_404(collection.articles, pk=parent_id)
+        form = article_create_form(collection, initial={"parent": parent.pk}, child=True)
+        return render(
+            request,
+            "editor/_article_create_modal.html",
+            {
+                "form": form,
+                "modal_id": "modal-new-child-article",
+                "language_name": language_name(language),
+                "autoshow": True,
+            },
+        )
+    form = article_create_form(collection, request.POST, child="child" in request.GET)
     if not form.is_valid():
         return form_invalid(request, form, context={"in_modal": True})
     translation = content.create_article(
         collection,
         title=form.cleaned_data["title"],
-        language=form.cleaned_data["language"],
+        language=language,
         parent=form.cleaned_data["parent"],
         user=request.user,
     )
@@ -211,7 +245,7 @@ def markdown_import(request, slug):
         translation = content.create_article(
             collection,
             title=title,
-            language=form.cleaned_data["language"],
+            language=current_language(request.user),
             parent=form.cleaned_data["parent"],
             content=doc,
             user=request.user,

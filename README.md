@@ -13,7 +13,8 @@ documentation.
   reading to some groups, inherited by their sub-articles.
 - **Full-text search** with PostgreSQL (one configuration per language, accent folding, typo
   tolerance), always filtered by the reader's rights.
-- Article comments, cookie-less read statistics, Markdown import and export, a shared glossary.
+- Editorial comments (never shown to readers), cookie-less read statistics, Markdown import and
+  export, a shared glossary.
 - Local accounts by invitation and generic OpenID Connect (Google Workspace, Microsoft Entra,
   Keycloak…).
 
