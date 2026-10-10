@@ -102,3 +102,7 @@ uv run manage.py makemessages -l fr -l de -l it --ignore=.venv --ignore=node_mod
   --ignore=dist --ignore=static --ignore=tests --no-location
 uv run manage.py compilemessages --ignore=.venv
 ```
+
+## Rules
+
+- Do not use em dashes. If an em dash would normally appear, use a regular hyphens, comma or period, even if it's not the perfect use of punctuation.
